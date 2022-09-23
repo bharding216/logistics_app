@@ -34,22 +34,23 @@
             {% endfor %}
         </table>
 
-    <h3>View Appointments:</h3><br>
-    <form action="/" method="GET">
-        <label>Select a material:</label><br>
-        <input type="checkbox" name="material_filter" id="HCl_filter" value="HCl">
-        <label for="HCl">HCl</label><br>
-        <input type="checkbox" name="material_filter" id="Caustic_filter" value="Caustic">
-        <label for="Caustic">Caustic</label><br>
-        <input type="checkbox" name="material_filter" id="Bleach_filter" value="Bleach">
-        <label for="Bleach">Bleach</label><br>
+    <div id="view_bgrd">
+        <h3>View Appointments:</h3><br>
+        <form action="/" method="GET">
+            <label>Select a material:</label><br>
+            <input type="checkbox" name="material_filter" id="HCl_filter" value="HCl">
+            <label for="HCl">HCl</label><br>
+            <input type="checkbox" name="material_filter" id="Caustic_filter" value="Caustic">
+            <label for="Caustic">Caustic</label><br>
+            <input type="checkbox" name="material_filter" id="Bleach_filter" value="Bleach">
+            <label for="Bleach">Bleach</label><br>
 
-        <label for="start_date_filter">Choose a start date:</label>
-        <input type="date" id="start_date_filter" name="start_date_filter" min="2022-01-01"><br>
-        <label for="end_date_filter">Choose an end date:</label>
-        <input type="date" id="end_date_filter" name="end_date_filter" min="2022-01-01"><br>
+            <label for="start_date_filter">Choose a start date:</label>
+            <input type="date" id="start_date_filter" name="start_date_filter" min="2022-01-01"><br>
+            <label for="end_date_filter">Choose an end date:</label>
+            <input type="date" id="end_date_filter" name="end_date_filter" min="2022-01-01"><br>
 
-        <input type="submit" value="View Appointments">
-    </form>
-
+            <input type="submit" value="View Appointments">
+        </form>
+    </div>
 {% endblock %}

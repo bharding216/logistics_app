@@ -3,19 +3,40 @@ table {
     border-collapse: collapse;
 }
 
-td, th {
+th {
     border: 1px solid;
     text-align: center;
+    padding: 5px;
+    background-color: rgb(11, 83, 11);
+    color: white;
 }
 
-a:link{
+td {
+    border: 1px solid;
+    text-align: center;
+    padding: 5px;
+}
+
+tr:hover {
+    background-color: rgb(216, 253, 241);
+}
+
+a:link {
     color:green;
 }
 
-a:visited{
+a:visited {
     color:green;
 }
 
-a:hover{
+a:hover {
     color:black;
+}
+
+#view_bgrd {
+    background-color: rgb(201, 248, 201);
+    width:25%;
+    padding: 20px;
+    margin-top: 10px;
+
 }
