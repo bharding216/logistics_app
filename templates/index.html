@@ -6,6 +6,10 @@
 {% block body %}
     <h1>CarbonFree Logistics App</h1>
 
+    <div>
+        <a href="{{ url_for('create') }}">Create New Appointment</a>
+    </div>
+
     <h3>Appointment List:</h3>
         <table>
             <tr>
@@ -29,25 +33,6 @@
                 </tr>
             {% endfor %}
         </table>
-
-    <h3>Create a New Appointment:</h3>
-    <br>
-    <form action="/" method="POST" onsubmit="create_appt_popup()">
-        <label>Carrier:</label>
-        <input type="text" name="carrier" id="carrier" placeholder="Carrier Name"><br>
-        <label>Select a material:</label><br>
-        <input type="radio" name="material" id="HCl" value="HCl">
-        <label for="HCl">HCl</label><br>
-        <input type="radio" name="material" id="Caustic" value="Caustic">
-        <label for="Caustic">Caustic</label><br>
-        <input type="radio" name="material" id="Bleach" value="Bleach">
-        <label for="Bleach">Bleach</label><br>
-        <label for="pickup_date">Pickup Date:</label>
-        <input type="date" id="pickup_date" name="pickup_date"><br>
-        <label for="pickup_time">Select a time:</label>
-        <input type="time" id="pickup_time" name="pickup_time"><br>
-        <input type="submit" id="create_appt" value="Create Appointment">
-    </form>
 
     <h3>View Appointments:</h3><br>
     <form action="/" method="GET">

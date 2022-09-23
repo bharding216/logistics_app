@@ -36,8 +36,9 @@ def index():
         db.session.add(new_appt)
         db.session.commit()
         return redirect('/')
-
+    
     else:
+
         search_material = request.args.getlist('material_filter')
         
 
@@ -58,6 +59,27 @@ def index():
 
 
         return render_template('index.html', appts=appts)
+
+
+
+
+@app.route('/create', methods=['GET', 'POST'])
+def create():
+    if request.method == 'POST':
+        carrier_name = request.form['carrier']
+        material_name = request.form['material']
+        pickup_date_input = request.form['pickup_date']
+        pickup_time_input = request.form['pickup_time']
+        
+        new_appt = appts_db(carrier=carrier_name, material=material_name, 
+            pickup_date=pickup_date_input, pickup_time=pickup_time_input)
+        
+        db.session.add(new_appt)
+        db.session.commit()
+        return redirect('/')
+
+    else:
+        return render_template('create.html')
 
 
 
