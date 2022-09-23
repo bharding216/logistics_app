@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block head%}
+{% endblock %}
+
+{% block body%}
+
+<h3>Update Appointment:</h3><br>
+<form action="/update/{{appt.id}}" method="POST">
+    <label>Carrier:</label>
+    <input type="text" name="carrier" id="carrier" 
+        value="{{ appt.carrier }}"><br>
+
+    <h4>Current material = {{ appt.material }}</h4>
+    <label>Select a new material:</label><br>
+    <input type="radio" name="material_update" id="HCl" value="HCl">
+    <label for="HCl">HCl</label><br>
+
+    <input type="radio" name="material_update" id="Caustic" value="Caustic">
+    <label for="Caustic">Caustic</label><br>
+
+    <input type="radio" name="material_update" id="Bleach" value="Bleach">
+    <label for="Bleach">Bleach</label><br>
+
+    <h4>Current pickup date = {{ appt.pickup_date }}</h4>
+    <label for="pickup_date">Select a new date:</label>
+    <input type="date" id="pickup_date" name="pickup_date" value="{{ appt.pickup_date }}"><br>
+
+    <h4>Current pickup time = {{ appt.pickup_time }}</h4>
+    <label for="pickup_time">Select a new time:</label>
+    <input type="time" id="pickup_time" name="pickup_time" value="{{ appt.pickup_time }}"><br>
+
+
+    <button type="submit" id="update_button" disabled>Update Appointment</button>
+</form>
+
+<script>
+//define a variable named 'update' to represent the button
+let update = document.querySelector('#update_button');
+//when you click on the form, call the function named 'enable'
+document.querySelector('form').addEventListener('click', enable);
+
+//if you clicked a radio button, enable the submit button
+function enable(event) {
+    if(event.target.name === 'material_update') {
+        update.disabled = false;
+    }
+}
+</script>
+
+{% endblock%}
