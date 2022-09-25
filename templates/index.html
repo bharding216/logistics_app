@@ -10,8 +10,37 @@
 
     <h1>CarbonFree Logistics App</h1>
 
-    <div>
-        <a href="{{ url_for('create') }}">Create New Appointment</a>
+    <a href="{{ url_for('create') }}" class="create_edit">Create New Appointment</a>
+
+    <h3>View Appointments:</h3>
+
+    <div id="view_form">
+        <form action="/" method="GET">
+            <div class="column">
+                <label><b>Select a material:</b></label><br>
+                <input type="checkbox" name="material_filter" id="HCl_filter" value="HCl">
+                <label for="HCl">HCl</label><br>
+                <input type="checkbox" name="material_filter" id="Caustic_filter" value="Caustic">
+                <label for="Caustic">Caustic</label><br>
+                <input type="checkbox" name="material_filter" id="Bleach_filter" value="Bleach">
+                <label for="Bleach">Bleach</label><br>
+            </div>
+
+            <div class="column">
+                <div id="start_end_dates">
+                    <label for="start_date_filter">Choose a start date:</label>
+                    <input type="date" id="start_date_filter" name="start_date_filter" min="2022-01-01"><br>
+                    <label for="end_date_filter">Choose an end date:</label>
+                    <input type="date" id="end_date_filter" name="end_date_filter" min="2022-01-01"><br>
+                </div>
+            </div>
+
+            <div class="column">
+                <div id="submit_view_form">
+                    <input type="submit" value="View Appointments" class="create_edit">
+                </div>
+            </div>
+        </form>
     </div>
 
     <h3>Appointment List:</h3>
@@ -31,30 +60,11 @@
                     <td>{{ appt.pickup_date }}</td>
                     <td>{{ appt.pickup_time }}</td>
                     <td>
-                        <a href="{{ url_for('update', id=appt.id) }}">Update</a>
-                        <a href="{{ url_for('delete', id=appt.id) }}">Delete</a>
+                        <a href="{{ url_for('update', id=appt.id) }}" class="delete_update_buttons">Update</a>
+                        <a href="{{ url_for('delete', id=appt.id) }}"class="delete_update_buttons">Delete</a>
                     </td>
                 </tr>
             {% endfor %}
         </table>
 
-    <div id="view_bgrd">
-        <h3>View Appointments:</h3><br>
-        <form action="/" method="GET">
-            <label>Select a material:</label><br>
-            <input type="checkbox" name="material_filter" id="HCl_filter" value="HCl">
-            <label for="HCl">HCl</label><br>
-            <input type="checkbox" name="material_filter" id="Caustic_filter" value="Caustic">
-            <label for="Caustic">Caustic</label><br>
-            <input type="checkbox" name="material_filter" id="Bleach_filter" value="Bleach">
-            <label for="Bleach">Bleach</label><br>
-
-            <label for="start_date_filter">Choose a start date:</label>
-            <input type="date" id="start_date_filter" name="start_date_filter" min="2022-01-01"><br>
-            <label for="end_date_filter">Choose an end date:</label>
-            <input type="date" id="end_date_filter" name="end_date_filter" min="2022-01-01"><br>
-
-            <input type="submit" value="View Appointments">
-        </form>
-    </div>
 {% endblock %}

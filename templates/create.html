@@ -22,11 +22,12 @@
         <input type="date" id="pickup_date" name="pickup_date"><br>
         <label for="pickup_time">Select a time:</label>
         <input type="time" id="pickup_time" name="pickup_time"><br>
-        <input type="submit" id="create_appt" value="Create Appointment">
+        <input type="submit" id="create_appt" value="Create Appointment" class="create_edit">
     </form>
+    <br>
 
     <form action="{{ url_for('index') }}">
-        <input type="submit" value="Go to Homepage">
+        <input type="submit" value="Go to Homepage" class="create_edit">
     </form>
 
     {% endblock %}
