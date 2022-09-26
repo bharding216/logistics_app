@@ -18,9 +18,8 @@ class appts_db(db.Model):
 
 class carriers_db(db.Model):
     carrier_id = db.Column(db.Integer, primary_key=True)
-    carrier = db.Column(db.String(100))
+    carrier_name = db.Column(db.String(100))
     phone_number = db.Column(db.String(15))
-    carrier_name = carrier
 
 
 
