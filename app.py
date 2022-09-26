@@ -16,6 +16,15 @@ class appts_db(db.Model):
     pickup_date = db.Column(db.String(10))
     pickup_time = db.Column(db.String(5))
 
+class carriers_db(db.Model):
+    carrier_id = db.Column(db.Integer, primary_key=True)
+    carrier = db.Column(db.String(100))
+    phone_number = db.Column(db.String(15))
+    carrier_name = carrier
+
+
+
+
     def __repr__(self):
         return '<Appt %r>' % self.id
 

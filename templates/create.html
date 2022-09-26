@@ -10,18 +10,26 @@
     <br>
     <form action="/" method="POST" onsubmit="create_appt_popup()">
         <label>Carrier:</label>
-        <input type="text" name="carrier" id="carrier" placeholder="Carrier Name"><br>
+        <input type="text" name="carrier" id="carrier" placeholder="Carrier Name"><br><br>
+
+        <label>Choose an existing Carrier:</label>
+        <select>
+            {% for carrier in carriers %}
+                <option value = "{{ carrier.carrier_name }}" selected>{{ carrier_name }}</option>
+            {% endfor %}
+        </select><br><br>
+
         <label>Select a material:</label><br>
         <input type="radio" name="material" id="HCl" value="HCl">
         <label for="HCl">HCl</label><br>
         <input type="radio" name="material" id="Caustic" value="Caustic">
         <label for="Caustic">Caustic</label><br>
         <input type="radio" name="material" id="Bleach" value="Bleach">
-        <label for="Bleach">Bleach</label><br>
+        <label for="Bleach">Bleach</label><br><br>
         <label for="pickup_date">Pickup Date:</label>
-        <input type="date" id="pickup_date" name="pickup_date"><br>
+        <input type="date" id="pickup_date" name="pickup_date"><br><br>
         <label for="pickup_time">Select a time:</label>
-        <input type="time" id="pickup_time" name="pickup_time"><br>
+        <input type="time" id="pickup_time" name="pickup_time"><br><br>
         <input type="submit" id="create_appt" value="Create Appointment" class="create_edit">
     </form>
     <br>
