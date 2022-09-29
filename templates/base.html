@@ -7,12 +7,26 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <script src="{{ url_for('static', filename='js/my-index.js') }}"></script>
 
+    <title>Logistics App</title>
     {% block head %}
-        <title>Truck App</title>
     {% endblock %}
 </head>
 
 <body>
+    <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('create') }}">Create</a></li>
+        <li><a href="{{ url_for('history') }}">History</a></li>
+    </ul>
+
+    <img id="logo"
+        src="/static/carbonfree logo.png" 
+        width: 300px;
+        height: 200px;
+        style="width: 300px; height:80px; object-fit: cover;">
+
+    <h1>CarbonFree Logistics Management System</h1>
+
     {% block body %}
     {% endblock %}
 </body>

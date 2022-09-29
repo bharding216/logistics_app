@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+    
+{% block body %}
+    <h3>Add New Carrier to Database:</h3><br>
+
+    <form action="/new_carrier" method="POST" class="form">
+    <!--data is sent to the 'new_carrier' route-->
+        <label>Carrier Name:</label>
+        <input type="text" name="carrier_name" id="carrier_name" 
+            placeholder="Carrier Name"><br><br>
+
+        <label for="phone">Phone Number (###-###-####):</label>
+        <input type="tel" id="carrier_phone" name="carrier_phone" 
+            placeholder="210-555-5555" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required><br><br>
+
+        <input type="submit" id="new_carrier_submit" value="Submit" class="create_edit">
+
+    </form>
+
+
+{% endblock %}

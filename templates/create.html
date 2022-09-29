@@ -4,38 +4,66 @@
 {% endblock %}
     
 {% block body %}
-    <h1>CarbonFree Logistics App</h1>
+    <div class="create_column">
+        <h3>Create a New Appointment:</h3>
+        <br>
+        <form action="/" method="POST" onsubmit="create_appt_popup()" class="form">
+            <!--this Jinja for loop goes through each carrier 
+            in the 'carriers' column that is passed from the view 
+            function and adds all the unique values to the
+            dropdown list.-->
+            <label>Choose an existing Carrier:</label><br>
+            <select name="carrier">
+                {% for carrier in carriers %}
+                    <option value = "{{ carrier.carrier_name }}" 
+                        selected>{{ carrier.carrier_name }}</option>
+                {% endfor %}
+            </select><br><br>
 
-    <h3>Create a New Appointment:</h3>
-    <br>
-    <form action="/" method="POST" onsubmit="create_appt_popup()">
-        <label>Carrier:</label>
-        <input type="text" name="carrier" id="carrier" placeholder="Carrier Name"><br><br>
+            <label for="volume">Requested Volume:</label><br>
+            <input type="number" name="volume" id="volume" value="volume"><br><br>
 
-        <label>Choose an existing Carrier:</label>
-        <select>
-            {% for carrier in carriers %}
-                <option value = "{{ carrier.carrier_name }}" selected>{{ carrier_name }}</option>
-            {% endfor %}
-        </select><br><br>
+            <label>Select a material:</label><br>
+            <p>HCl:</p>
+            <input type="radio" name="material" id="36%_HCl" value="36% HCl">
+            <label for="36% HCl">36% HCl</label><br>
+            <input type="radio" name="material" id="32%_HCl" value="32% HCl">
+            <label for="32% HCl">32% HCl</label><br>
+            <input type="radio" name="material" id="15%_HCl" value="15% HCl">
+            <label for="15% HCl">15% HCl</label><br>
+            <p>Caustic:</p>
+            <input type="radio" name="material" id="50%_Caustic" value="50% Caustic">
+            <label for="50% Caustic">50% Caustic</label><br>
+            <input type="radio" name="material" id="25%_Caustic" value="25% Caustic">
+            <label for="25% Caustic">25% Caustic</label><br>
+            <input type="radio" name="material" id="20%_Caustic" value="20% Caustic">
+            <label for="20% Caustic">20% Caustic</label><br>
+            <p>Bleach:</p>
+            <input type="radio" name="material" id="12.5%_Bleach" value="12.5% Bleach">
+            <label for="12.5% Bleach">12.5% Bleach</label><br>
+            <input type="radio" name="material" id="10%_Bleach" value="10% Bleach">
+            <label for="10% Bleach">10% Bleach</label><br><br>
+            
+            <label for="pickup_date">Pickup Date:</label>
+            <input type="date" id="pickup_date" name="pickup_date"><br><br>
+            <label for="pickup_time">Select a time:</label>
+            <input type="time" id="pickup_time" name="pickup_time"><br><br>
 
-        <label>Select a material:</label><br>
-        <input type="radio" name="material" id="HCl" value="HCl">
-        <label for="HCl">HCl</label><br>
-        <input type="radio" name="material" id="Caustic" value="Caustic">
-        <label for="Caustic">Caustic</label><br>
-        <input type="radio" name="material" id="Bleach" value="Bleach">
-        <label for="Bleach">Bleach</label><br><br>
-        <label for="pickup_date">Pickup Date:</label>
-        <input type="date" id="pickup_date" name="pickup_date"><br><br>
-        <label for="pickup_time">Select a time:</label>
-        <input type="time" id="pickup_time" name="pickup_time"><br><br>
-        <input type="submit" id="create_appt" value="Create Appointment" class="create_edit">
-    </form>
-    <br>
+            <label for="PO_number">PO Number:</label>
+            <input type="text" id="PO_number" name="PO_number" placeholder="PO-xxxxx"><br><br>
+            
+            <input type="submit" id="create_appt" value="Submit" class="create_edit">
+        
+        </form><br><br>
+    </div>
 
-    <form action="{{ url_for('index') }}">
-        <input type="submit" value="Go to Homepage" class="create_edit">
-    </form>
+    <div class="create_column">
+        <h4>Don't see your carrier in the dropdown menu?</h4s>
+        <form action="{{ url_for('new_carrier') }}">
+            <input type="submit" value="Add New Carrier" class="create_edit">
+        </form><br>
+    </div>
 
-    {% endblock %}
+
+
+{% endblock %}
