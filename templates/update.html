@@ -15,7 +15,7 @@
             <h4>Current volume = {{ appt.volume }} gallons</h4>
             <label>Enter a new volume:</label><br>
             <input type="number" name="volume_update" id="volume" value="volume"
-                placeholder="optional"><br><br>
+                value="{{ appt.volume }}"><br><br>
 
             <h4>Current material = {{ appt.material }}</h4>
             <label>Select a new material:</label><br>
@@ -50,7 +50,7 @@
             <h4>Current PO number: = {{ appt.PO_number }}</h4>
             <label>Enter a new PO Number:</label><br>
             <input type="text" id="PO_number" name="PO_number_update" 
-                placeholder="PO-xxxxx"><br><br>
+                value="{{ appt.PO_number }}"><br><br>
 
 
             <button type="submit" class="create_edit" id="update_button" disabled>Update Appointment</button>

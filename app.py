@@ -1,6 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
+from sqlalchemy import event
 
 
 app = Flask (__name__)
@@ -18,13 +19,37 @@ class appts_db(db.Model):
     pickup_time = db.Column(db.String(5))
     PO_number = db.Column(db.String(30))
 
+    #backref behaves like a column in the log_db model. This way, 
+    #you can access the appt that the log was assigned to using the
+    #"appt" attribute. 
+    log_id = db.relationship("log_db", backref="appt", lazy=True)
+
 class carriers_db(db.Model):
     carrier_id = db.Column(db.Integer, primary_key=True)
     carrier_name = db.Column(db.String(100))
     phone_number = db.Column(db.String(15))
 
+@event.listens_for(appts_db, "after_insert")
+def insert_log(mapper, connection, target):
+    po = log_db.__table__
+    connection.execute (po.insert().values(appt_id=target.id, action='Created'))
 
+@event.listens_for(appts_db, "after_update")
+def update_log(mapper, connection, target):
+    po = log_db.__table__
+    connection.execute (po.insert().values(appt_id=target.id, action='Updated'))
 
+@event.listens_for(appts_db, "before_delete")
+def delete_log(mapper, connection, target):
+    po = log_db.__table__
+    connection.execute (po.insert().values(appt_id=target.id, action='Deleted'))
+
+class log_db(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    appt_id = db.Column(db.Integer, db.ForeignKey('appts_db.id'))
+    modified_on = db.Column(db.DateTime, default=datetime.now)
+    action = db.Column(db.String(7))
+    #appts = db.relationship("appts_db", back_populates="log_db")
 
     def __repr__(self):
         return '<Appt %r>' % self.id
@@ -51,40 +76,29 @@ def index():
         return redirect('/')
     
     else:
-
         search_material = request.args.getlist('material_filter')
-        
-
         if not request.args.get('start_date_filter'):
             #this if-block will execute if the string is empty  
             search_date_start = '2022-01-01'
         else:
             search_date_start = request.args.get('start_date_filter')
-
         if not request.args.get('end_date_filter'):
             search_date_end = '2100-01-01'
         else:
             search_date_end = request.args.get('end_date_filter')
-
-
-
-
         if not request.args.get('start_time_filter'):
             search_time_start = '00:00'
         else:
             search_time_start = request.args.get('start_time_filter')
-
         if not request.args.get('end_time_filter'):
             search_time_end = '23:59'
         else:
             search_time_end = request.args.get('end_time_filter')
 
-
         appts = appts_db.query.filter(appts_db.material.in_(search_material)) \
             .filter(appts_db.pickup_date.between(search_date_start, search_date_end)) \
             .filter(appts_db.pickup_time.between(search_time_start, search_time_end)) \
             .order_by(appts_db.pickup_date).all()
-
 
         return render_template('index.html', appts=appts)
 
@@ -92,7 +106,7 @@ def index():
 
 @app.route('/history', methods=['GET'])
 def history():
-    log = ["coming", "soon", "!!!"]
+    log = log_db.query.all()
     return render_template('history.html', log=log)
 
 
@@ -123,6 +137,8 @@ def create():
         #it is rendered. 
         carriers = carriers_db.query.order_by(carriers_db.carrier_name).all()
         return render_template('create.html', carriers=carriers)
+
+
 
 
 
