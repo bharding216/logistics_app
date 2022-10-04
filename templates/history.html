@@ -4,11 +4,42 @@
 {% endblock %}
     
 {% block body %}
+<form class="form">
+    <label for="log">Number of change log entries to query:</label>
+    <select name="log" id="log_query">
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+    </select><br><br>
+    <input type="submit" value="Update View" class="create_edit">
+</form>
 
-{% for item in log %}
+<div id="change_log">
+    <h3>Appointment Change Log:</h3>
+    <table>
+        <tr>
+            <th>Action</th>
+            <th>Carrier</th>
+            <th>Material</th>
+            <th>Volume [gallons]</th>
+            <th>Pickup Date [YYYY-MM-DD]</th>
+            <th>Pickup Time [24-hr]</th>
+            <th>Date Modified</th>
+        </tr>
 
-    <p>{{ item }}</p>
+            {% for item in log %}
+                <tr>
+                    <td>{{ item.action }}</td>
+                    <td>{{ item.appt.carrier }}</td>
+                    <td>{{ item.appt.material }}</td>
+                    <td>{{ item.appt.volume }}</td>
+                    <td>{{ item.appt.pickup_date }}</td>
+                    <td>{{ item.appt.pickup_time }}</td>
+                    <td>{{ item.modified_on.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                </tr>
+            {% endfor %}
 
-{% endfor %}
-
+    </table>
+</div>
 {% endblock %}
