@@ -34,10 +34,15 @@ def insert_log(mapper, connection, target):
     po = log_db.__table__
     connection.execute (po.insert().values(appt_id=target.id, action='Created'))
 
+#@event.listens_for(appts_db, "before_update")
+#def update_log_old(mapper, connection, target):
+#    po = log_db.__table__
+#    connection.execute (po.insert().values(appt_id=target.id, action='Updated - Old'))
+
 @event.listens_for(appts_db, "after_update")
-def update_log(mapper, connection, target):
+def update_log_new(mapper, connection, target):
     po = log_db.__table__
-    connection.execute (po.insert().values(appt_id=target.id, action='Updated'))
+    connection.execute (po.insert().values(appt_id=target.id, action='Updated - New'))
 
 @event.listens_for(appts_db, "before_delete")
 def delete_log(mapper, connection, target):
@@ -49,7 +54,6 @@ class log_db(db.Model):
     appt_id = db.Column(db.Integer, db.ForeignKey('appts_db.id'))
     modified_on = db.Column(db.DateTime, default=datetime.now)
     action = db.Column(db.String(7))
-    #appts = db.relationship("appts_db", back_populates="log_db")
 
     def __repr__(self):
         return '<Appt %r>' % self.id
@@ -106,7 +110,12 @@ def index():
 
 @app.route('/history', methods=['GET'])
 def history():
-    log = log_db.query.all()
+    if not request.args.get('log'):
+        query_limit = "10"
+    else:
+        query_limit = request.args.get('log')
+
+    log = log_db.query.order_by(log_db.id.desc()).limit(query_limit).all()
     return render_template('history.html', log=log)
 
 
