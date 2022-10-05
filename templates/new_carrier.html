@@ -14,10 +14,11 @@
 
         <label for="phone">Phone Number (###-###-####):</label>
         <input type="tel" id="carrier_phone" name="carrier_phone" 
-            placeholder="210-555-5555" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required><br><br>
+            placeholder="210-555-5555" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" 
+                required><br><br>
 
-        <input type="submit" id="new_carrier_submit" value="Submit" class="create_edit">
-
+        <input type="submit" id="new_carrier_submit" value="Submit" 
+            class="create_edit" onclick="new_carrier_popup()">
     </form>
 
 

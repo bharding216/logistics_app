@@ -3,12 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
 from sqlalchemy import event
 
-
 app = Flask (__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
-
-
 
 class appts_db(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -58,9 +55,6 @@ class log_db(db.Model):
     def __repr__(self):
         return '<Appt %r>' % self.id
 
-
-
-
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -98,15 +92,27 @@ def index():
             search_time_end = '23:59'
         else:
             search_time_end = request.args.get('end_time_filter')
+        
+        #if the user wants to see the appointments for all carriers
+        if request.args.get('carrier') == 'all':
+            #then don't filter the results by carrier name
+            appts = appts_db.query.filter(appts_db.material.in_(search_material)) \
+                .filter(appts_db.pickup_date.between(search_date_start, search_date_end)) \
+                .filter(appts_db.pickup_time.between(search_time_start, search_time_end)) \
+                .order_by(appts_db.pickup_date).all()
+        #if you want to filter by a specific carrier
+        else:
+            search_carrier = request.args.get('carrier')
+            appts = appts_db.query.filter(appts_db.material.in_(search_material)) \
+                .filter(appts_db.pickup_date.between(search_date_start, search_date_end)) \
+                .filter(appts_db.pickup_time.between(search_time_start, search_time_end)) \
+                .filter(appts_db.carrier == search_carrier) \
+                .order_by(appts_db.pickup_date).all()
 
-        appts = appts_db.query.filter(appts_db.material.in_(search_material)) \
-            .filter(appts_db.pickup_date.between(search_date_start, search_date_end)) \
-            .filter(appts_db.pickup_time.between(search_time_start, search_time_end)) \
-            .order_by(appts_db.pickup_date).all()
+        #to generate the carriers within the dropdown list
+        carriers = carriers_db.query.order_by(carriers_db.carrier_name).all()
 
-        return render_template('index.html', appts=appts)
-
-
+        return render_template('index.html', appts=appts, carriers=carriers)
 
 @app.route('/history', methods=['GET'])
 def history():
@@ -117,10 +123,6 @@ def history():
 
     log = log_db.query.order_by(log_db.id.desc()).limit(query_limit).all()
     return render_template('history.html', log=log)
-
-
-
-
 
 @app.route('/create', methods=['GET', 'POST'])
 def create():
@@ -138,7 +140,6 @@ def create():
 
         db.session.add(new_appt)
         db.session.commit()
-
         return redirect('/')
 
     else:
@@ -146,10 +147,6 @@ def create():
         #it is rendered. 
         carriers = carriers_db.query.order_by(carriers_db.carrier_name).all()
         return render_template('create.html', carriers=carriers)
-
-
-
-
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
@@ -167,10 +164,8 @@ def update(id):
         return redirect('/')
     
     else:
-        return render_template('update.html', appt=appt)
-
-
-
+        carriers = carriers_db.query.order_by(carriers_db.carrier_name).all()
+        return render_template('update.html', appt=appt, carriers=carriers)
 
 @app.route('/delete/<int:id>')
 def delete(id):
@@ -178,8 +173,6 @@ def delete(id):
     db.session.delete(appt_to_delete)
     db.session.commit()
     return redirect('/')
-
-
 
 #the view function describes the steps taken when you are
 #on that specific page. The view function can also pass 
@@ -197,7 +190,6 @@ def new_carrier():
         return redirect('/create')
 
     else:
-
         return render_template('new_carrier.html')
 
 if __name__ == '__main__':

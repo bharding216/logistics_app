@@ -5,8 +5,7 @@
     
 {% block body %}
     <div class="create_column">
-        <h3>Create a New Appointment:</h3>
-        <br>
+        <h3>Create a New Appointment:</h3><br>
         <form action="/" method="POST" onsubmit="create_appt_popup()" class="form">
             <!--this Jinja for loop goes through each carrier 
             in the 'carriers' column that is passed from the view 
@@ -50,7 +49,8 @@
             <input type="time" id="pickup_time" name="pickup_time"><br><br>
 
             <label for="PO_number">PO Number:</label>
-            <input type="text" id="PO_number" name="PO_number" placeholder="PO-xxxxx"><br><br>
+            <input type="text" id="PO_number" name="PO_number" 
+                placeholder="PO-xxxxx"><br><br>
             
             <input type="submit" id="create_appt" value="Submit" class="create_edit">
 
@@ -58,7 +58,7 @@
     </div>
 
     <div class="create_column">
-        <h4>Don't see your carrier in the dropdown menu?</h4s>
+        <h4>Don't see your carrier in the dropdown menu?</h4>
         <form action="{{ url_for('new_carrier') }}">
             <input type="submit" value="Add New Carrier" class="create_edit">
         </form><br>
