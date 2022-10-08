@@ -28,17 +28,17 @@
             <th>Date Modified</th>
         </tr>
 
-            {% for item in log %}
-                <tr>
-                    <td>{{ item.action }}</td>
-                    <td>{{ item.appt.carrier }}</td>
-                    <td>{{ item.appt.material }}</td>
-                    <td>{{ item.appt.volume }}</td>
-                    <td>{{ item.appt.pickup_date }}</td>
-                    <td>{{ item.appt.pickup_time }}</td>
-                    <td>{{ item.modified_on.strftime("%Y-%m-%d %H:%M:%S") }}</td>
-                </tr>
-            {% endfor %}
+        {% for item in log %}
+            <tr>
+                <td>{{ item.action }}</td>
+                <td>{{ item.carrier }}</td>
+                <td>{{ item.material }}</td>
+                <td>{{ item.volume }}</td>
+                <td>{{ item.pickup_date }}</td>
+                <td>{{ item.pickup_time }}</td>
+                <td>{{ item.modified_on.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+            </tr>
+        {% endfor %}
 
     </table>
 </div>

@@ -1,7 +1,7 @@
 from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
-from sqlalchemy import event
+from sqlalchemy import event, insert
 
 app = Flask (__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -9,7 +9,7 @@ db = SQLAlchemy(app)
 
 class appts_db(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    carrier = db.Column(db.String(100))
+    carrier = db.Column(db.String(100), nullable=False)
     volume = db.Column(db.Integer)
     material = db.Column(db.String(10))
     pickup_date = db.Column(db.String(10))
@@ -19,45 +19,59 @@ class appts_db(db.Model):
     #backref behaves like a column in the log_db model. This way, 
     #you can access the appt that the log was assigned to using the
     #"appt" attribute. 
-    log_id = db.relationship("log_db", backref="appt", lazy=True)
+    #log_id = db.relationship("log_db", backref="appt", lazy=True)
 
 class carriers_db(db.Model):
     carrier_id = db.Column(db.Integer, primary_key=True)
-    carrier_name = db.Column(db.String(100))
+    carrier_name = db.Column(db.String(100), nullable=False)
     phone_number = db.Column(db.String(15))
 
-@event.listens_for(appts_db, "after_insert")
-def insert_log(mapper, connection, target):
-    po = log_db.__table__
-    connection.execute (po.insert().values(appt_id=target.id, action='Created'))
+#@event.listens_for(appts_db, "after_insert")
+#def insert_log(mapper, connection, target):
+#    po = log_db.__table__
+#    connection.execute (po.insert().
+#        values(appt_id=target.id, action='Created'))
 
 #@event.listens_for(appts_db, "before_update")
 #def update_log_old(mapper, connection, target):
 #    po = log_db.__table__
-#    connection.execute (po.insert().values(appt_id=target.id, action='Updated - Old'))
+#    connection.execute (po.insert().
+#        values(appt_id=target.id, action='Updated - Old'))
 
-@event.listens_for(appts_db, "after_update")
-def update_log_new(mapper, connection, target):
-    po = log_db.__table__
-    connection.execute (po.insert().values(appt_id=target.id, action='Updated - New'))
+#@event.listens_for(appts_db, "after_update")
+#def update_log_new(mapper, connection, target):
+#    po = log_db.__table__
+#    connection.execute (po.insert().
+#        values(appt_id=target.id, action='Updated - New'))
 
-@event.listens_for(appts_db, "before_delete")
-def delete_log(mapper, connection, target):
-    po = log_db.__table__
-    connection.execute (po.insert().values(appt_id=target.id, action='Deleted'))
+#@event.listens_for(appts_db, "before_delete")
+#def delete_log(mapper, connection, target):
+#    po = log_db.__table__
+#    connection.execute (po.insert().
+#        values(appt_id=target.id, action='Deleted'))
 
 class log_db(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    appt_id = db.Column(db.Integer, db.ForeignKey('appts_db.id'))
+    #appt_id = db.Column(db.Integer, db.ForeignKey('appts_db.id'))
     modified_on = db.Column(db.DateTime, default=datetime.now)
     action = db.Column(db.String(7))
+    carrier = db.Column(db.String(100), nullable=False)
+    volume = db.Column(db.Integer)
+    material = db.Column(db.String(10))
+    pickup_date = db.Column(db.String(10))
+    pickup_time = db.Column(db.String(5))
+    PO_number = db.Column(db.String(30))
 
     def __repr__(self):
         return '<Appt %r>' % self.id
 
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    #if the user creates a new appointment:
     if request.method == 'POST':
+
         carrier_name = request.form['carrier']
         requested_volume = request.form['volume']
         material_name = request.form['material']
@@ -65,11 +79,26 @@ def index():
         pickup_time_input = request.form['pickup_time']
         PO_number = request.form['PO_number']
         
-        new_appt = appts_db(carrier=carrier_name, volume=requested_volume,
-            material=material_name, pickup_date=pickup_date_input, 
-            pickup_time=pickup_time_input, PO_number=PO_number)
+        new_appt = appts_db(
+            carrier=carrier_name, 
+            volume=requested_volume,
+            material=material_name, 
+            pickup_date=pickup_date_input, 
+            pickup_time=pickup_time_input, 
+            PO_number=PO_number
+        )
         
-        db.session.add(new_appt)
+        create_new_log = log_db(
+            action="Created",
+            carrier=carrier_name, 
+            volume=requested_volume,
+            material=material_name, 
+            pickup_date=pickup_date_input, 
+            pickup_time=pickup_time_input, 
+            PO_number=PO_number
+        )
+
+        db.session.add_all([new_appt, create_new_log])
         db.session.commit()
         return redirect('/')
     
@@ -96,10 +125,10 @@ def index():
         #if the user wants to see the appointments for all carriers
         if request.args.get('carrier') == 'all':
             #then don't filter the results by carrier name
-            appts = appts_db.query.filter(appts_db.material.in_(search_material)) \
-                .filter(appts_db.pickup_date.between(search_date_start, search_date_end)) \
-                .filter(appts_db.pickup_time.between(search_time_start, search_time_end)) \
-                .order_by(appts_db.pickup_date).all()
+            appts = appts_db.query.filter(appts_db.material.in_(search_material)). \
+                filter(appts_db.pickup_date.between(search_date_start, search_date_end)). \
+                filter(appts_db.pickup_time.between(search_time_start, search_time_end)). \
+                order_by(appts_db.pickup_date).all()
         #if you want to filter by a specific carrier
         else:
             search_carrier = request.args.get('carrier')
@@ -153,6 +182,17 @@ def update(id):
     appt = appts_db.query.get_or_404(id)
 
     if request.method == 'POST':
+
+        update_new_log_old = log_db(
+            action="Updated - Old",
+            carrier=appt.carrier,
+            volume=appt.volume,
+            material=appt.material,
+            pickup_date=appt.pickup_date,
+            pickup_time=appt.pickup_time, 
+            PO_number=appt.PO_number
+        )
+
         appt.carrier = request.form['carrier']
         appt.volume = request.form['volume_update']
         appt.material = request.form['material_update']
@@ -160,6 +200,17 @@ def update(id):
         appt.pickup_time = request.form['pickup_time']
         appt.PO_number = request.form['PO_number_update']
 
+        update_new_log_new = log_db(
+            action="Updated - New",
+            carrier=request.form['carrier'],
+            volume=request.form['volume_update'],
+            material=request.form['material_update'],
+            pickup_date=request.form['pickup_date'],
+            pickup_time=request.form['pickup_time'], 
+            PO_number=request.form['PO_number_update']
+        )
+
+        db.session.add_all([update_new_log_old, update_new_log_new])
         db.session.commit()
         return redirect('/')
     
@@ -167,12 +218,30 @@ def update(id):
         carriers = carriers_db.query.order_by(carriers_db.carrier_name).all()
         return render_template('update.html', appt=appt, carriers=carriers)
 
-@app.route('/delete/<int:id>')
+
+
+
+@app.route('/delete/<int:id>', methods=['GET', 'DELETE', 'POST'])
 def delete(id):
     appt_to_delete = appts_db.query.get_or_404(id)
+
+    delete_new_log = log_db(
+        action="Deleted",
+        carrier=appt_to_delete.carrier,
+        volume=appt_to_delete.volume,
+        material=appt_to_delete.material,
+        pickup_date=appt_to_delete.pickup_date,
+        pickup_time=appt_to_delete.pickup_time, 
+        PO_number=appt_to_delete.PO_number
+    )
+
+    db.session.add(delete_new_log)
     db.session.delete(appt_to_delete)
     db.session.commit()
+
     return redirect('/')
+
+
 
 #the view function describes the steps taken when you are
 #on that specific page. The view function can also pass 

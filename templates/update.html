@@ -6,7 +6,9 @@
 {% block body %}
     <div class="create_column">
         <h3>Update Appointment:</h3><br>
-        <form action="/update/{{appt.id}}" method="POST" class="form">
+        <form action="/update/{{appt.id}}" method="POST" 
+            onsubmit="update_appt_popup()" class="form">
+
             <h4>Current carrier = {{ appt.carrier }}</h4>
             <label>Option to select a new carrier:</label><br>
             <select name="carrier">
@@ -24,23 +26,31 @@
             <h4>Current material = {{ appt.material }}</h4>
             <label>Select a new material:</label><br>
             <p>HCl:</p>
-            <input type="radio" name="material_update" id="36%_HCl" value="36% HCl">
+            <input type="radio" name="material_update" id="36%_HCl" 
+                value="36% HCl">
             <label for="36% HCl">36% HCl</label><br>
-            <input type="radio" name="material_update" id="32%_HCl" value="32% HCl">
+            <input type="radio" name="material_update" id="32%_HCl" 
+                value="32% HCl">
             <label for="32% HCl">32% HCl</label><br>
-            <input type="radio" name="material_update" id="15%_HCl" value="15% HCl">
+            <input type="radio" name="material_update" id="15%_HCl" 
+                value="15% HCl">
             <label for="15% HCl">15% HCl</label><br>
             <p>Caustic:</p>
-            <input type="radio" name="material_update" id="50%_Caustic" value="50% Caustic">
+            <input type="radio" name="material_update" id="50%_Caustic" 
+                value="50% Caustic">
             <label for="50% Caustic">50% Caustic</label><br>
-            <input type="radio" name="material_update" id="25%_Caustic" value="25% Caustic">
+            <input type="radio" name="material_update" id="25%_Caustic" 
+                value="25% Caustic">
             <label for="25% Caustic">25% Caustic</label><br>
-            <input type="radio" name="material_update" id="20%_Caustic" value="20% Caustic">
+            <input type="radio" name="material_update" id="20%_Caustic" 
+                value="20% Caustic">
             <label for="20% Caustic">20% Caustic</label><br>
             <p>Bleach:</p>
-            <input type="radio" name="material_update" id="12.5%_Bleach" value="12.5% Bleach">
+            <input type="radio" name="material_update" id="12.5%_Bleach" 
+                value="12.5% Bleach">
             <label for="12.5% Bleach">12.5% Bleach</label><br>
-            <input type="radio" name="material_update" id="10%_Bleach" value="10% Bleach">
+            <input type="radio" name="material_update" id="10%_Bleach" 
+                value="10% Bleach">
             <label for="10% Bleach">10% Bleach</label><br><br>
 
             <h4>Current pickup date = {{ appt.pickup_date }}</h4>
@@ -66,7 +76,8 @@
     <div class="create_column">
         <h4>Don't see your carrier in the dropdown menu?</h4>
         <form action="{{ url_for('new_carrier') }}">
-            <input type="submit" value="Add New Carrier" class="create_edit">
+            <input type="submit" value="Add New Carrier" 
+                class="create_edit">
         </form><br>
     </div>
 
