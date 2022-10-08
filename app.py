@@ -1,8 +1,13 @@
+#import files
+#--------------------------------------------------------------------
 from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
 from sqlalchemy import event, insert
+#--------------------------------------------------------------------
 
+#db preparation
+#--------------------------------------------------------------------
 app = Flask (__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
@@ -16,43 +21,13 @@ class appts_db(db.Model):
     pickup_time = db.Column(db.String(5))
     PO_number = db.Column(db.String(30))
 
-    #backref behaves like a column in the log_db model. This way, 
-    #you can access the appt that the log was assigned to using the
-    #"appt" attribute. 
-    #log_id = db.relationship("log_db", backref="appt", lazy=True)
-
 class carriers_db(db.Model):
     carrier_id = db.Column(db.Integer, primary_key=True)
     carrier_name = db.Column(db.String(100), nullable=False)
     phone_number = db.Column(db.String(15))
 
-#@event.listens_for(appts_db, "after_insert")
-#def insert_log(mapper, connection, target):
-#    po = log_db.__table__
-#    connection.execute (po.insert().
-#        values(appt_id=target.id, action='Created'))
-
-#@event.listens_for(appts_db, "before_update")
-#def update_log_old(mapper, connection, target):
-#    po = log_db.__table__
-#    connection.execute (po.insert().
-#        values(appt_id=target.id, action='Updated - Old'))
-
-#@event.listens_for(appts_db, "after_update")
-#def update_log_new(mapper, connection, target):
-#    po = log_db.__table__
-#    connection.execute (po.insert().
-#        values(appt_id=target.id, action='Updated - New'))
-
-#@event.listens_for(appts_db, "before_delete")
-#def delete_log(mapper, connection, target):
-#    po = log_db.__table__
-#    connection.execute (po.insert().
-#        values(appt_id=target.id, action='Deleted'))
-
 class log_db(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    #appt_id = db.Column(db.Integer, db.ForeignKey('appts_db.id'))
     modified_on = db.Column(db.DateTime, default=datetime.now)
     action = db.Column(db.String(7))
     carrier = db.Column(db.String(100), nullable=False)
@@ -64,8 +39,7 @@ class log_db(db.Model):
 
     def __repr__(self):
         return '<Appt %r>' % self.id
-
-
+#--------------------------------------------------------------------
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
