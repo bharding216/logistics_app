@@ -1,5 +1,3 @@
-#this is a new change to the python file
-#there should only be 3 db appointment entires
 #import files
 #--------------------------------------------------------------------
 from flask import Flask, render_template, url_for, request, redirect
