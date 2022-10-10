@@ -9,7 +9,7 @@ from sqlalchemy import event, insert
 #db setup
 #--------------------------------------------------------------------
 app = Flask (__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///.gitignore/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
 
 class appts_db(db.Model):
