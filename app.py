@@ -129,7 +129,7 @@ def history():
         query_limit = request.args.get('log')
 
     log = log_db.query.order_by(log_db.id.desc()).limit(query_limit).all()
-    return render_template('history.html', log=log)
+    return render_template('history.html', log=log, query_limit=query_limit)
 
 #--------------------------------------------------------------------
 #--------------------------------------------------------------------

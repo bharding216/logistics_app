@@ -8,13 +8,13 @@
     <label for="log">Number of change log entries to query:</label>
     <select name="log" id="log_query">
         <option value="10" 
-        {% if query_limit == 10 %} selected {% endif %}>10</option>
+        {% if query_limit == "10" %} selected {% endif %}>10</option>
         <option value="25" 
-        {% if query_limit == 25 %} selected {% endif %}>25</option>
+        {% if query_limit == "25" %} selected {% endif %}>25</option>
         <option value="50" 
-        {% if query_limit == 50 %} selected {% endif %}>50</option>
+        {% if query_limit == "50" %} selected {% endif %}>50</option>
         <option value="100" 
-        {% if query_limit == 100 %} selected {% endif %}>100</option>
+        {% if query_limit == "100" %} selected {% endif %}>100</option>
     </select><br><br>
     <input type="submit" value="Update View" class="create_edit">
 </form>
