@@ -9,16 +9,18 @@
         <form action="/update/{{appt.id}}" method="POST" 
             onsubmit="update_appt_popup()" class="form">
 
-            <h4>Current carrier = {{ appt.carrier }}</h4>
+            <h4>Current carrier: {{ appt.carrier }}</h4>
             <label>Option to select a new carrier:</label><br>
             <select name="carrier">
                 {% for carrier in carriers %}
-                    <option value = "{{ carrier.carrier_name }}" 
-                        selected>{{ carrier.carrier_name }}</option>
+                    <option 
+                    value = "{{ carrier.carrier_name }}"
+                    {% if carrier.carrier_name == appt.carrier %} selected {% endif %}>
+                    {{ carrier.carrier_name }}</option>
                 {% endfor %}
             </select><br><br>
 
-            <h4>Current volume = {{ appt.volume }} gallons</h4>
+            <h4>Current volume: {{ appt.volume }} gallons</h4>
             <label>Enter a new volume:</label><br>
             <input type="number" name="volume_update" id="volume"
                 value="{{ appt.volume }}"><br><br>
@@ -53,17 +55,17 @@
                 value="10% Bleach">
             <label for="10% Bleach">10% Bleach</label><br><br>
 
-            <h4>Current pickup date = {{ appt.pickup_date }}</h4>
+            <h4>Current pickup date: {{ appt.pickup_date }}</h4>
             <label for="pickup_date">Select a new date:</label>
             <input type="date" id="pickup_date" name="pickup_date" 
                 value="{{ appt.pickup_date }}"><br>
 
-            <h4>Current pickup time = {{ appt.pickup_time }}</h4>
+            <h4>Current pickup time: {{ appt.pickup_time }}</h4>
             <label for="pickup_time">Select a new time:</label>
             <input type="time" id="pickup_time" name="pickup_time" 
                 value="{{ appt.pickup_time }}"><br><br>
 
-            <h4>Current PO number: = {{ appt.PO_number }}</h4>
+            <h4>Current PO number: {{ appt.PO_number }}</h4>
             <label>Enter a new PO Number:</label><br>
             <input type="text" id="PO_number" name="PO_number_update" 
                 value="{{ appt.PO_number }}"><br><br>

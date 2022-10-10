@@ -8,7 +8,7 @@ function delete_appt_popup() {
 }
 
 function new_carrier_popup() {
-    alert("A new carrier was successfully added");
+    alert("New carrier was successfully added");
 }
 
 function update_appt_popup() {

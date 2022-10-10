@@ -6,7 +6,7 @@ from datetime import datetime, date
 from sqlalchemy import event, insert
 #--------------------------------------------------------------------
 
-#db preparation
+#db setup
 #--------------------------------------------------------------------
 app = Flask (__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
@@ -39,6 +39,7 @@ class log_db(db.Model):
 
     def __repr__(self):
         return '<Appt %r>' % self.id
+#--------------------------------------------------------------------
 #--------------------------------------------------------------------
 
 @app.route('/', methods=['GET', 'POST'])
@@ -117,6 +118,9 @@ def index():
 
         return render_template('index.html', appts=appts, carriers=carriers)
 
+#--------------------------------------------------------------------
+#--------------------------------------------------------------------
+
 @app.route('/history', methods=['GET'])
 def history():
     if not request.args.get('log'):
@@ -126,6 +130,10 @@ def history():
 
     log = log_db.query.order_by(log_db.id.desc()).limit(query_limit).all()
     return render_template('history.html', log=log)
+
+#--------------------------------------------------------------------
+#--------------------------------------------------------------------
+
 
 @app.route('/create', methods=['GET', 'POST'])
 def create():
@@ -150,6 +158,10 @@ def create():
         #it is rendered. 
         carriers = carriers_db.query.order_by(carriers_db.carrier_name).all()
         return render_template('create.html', carriers=carriers)
+
+#--------------------------------------------------------------------
+#--------------------------------------------------------------------
+
 
 @app.route('/update/<int:id>', methods=['GET', 'POST'])
 def update(id):
@@ -193,6 +205,8 @@ def update(id):
         return render_template('update.html', appt=appt, carriers=carriers)
 
 
+#--------------------------------------------------------------------
+#--------------------------------------------------------------------
 
 
 @app.route('/delete/<int:id>', methods=['GET', 'DELETE', 'POST'])
@@ -215,7 +229,8 @@ def delete(id):
 
     return redirect('/')
 
-
+#--------------------------------------------------------------------
+#--------------------------------------------------------------------
 
 #the view function describes the steps taken when you are
 #on that specific page. The view function can also pass 
