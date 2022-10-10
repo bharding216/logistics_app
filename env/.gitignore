@@ -1,3 +1,4 @@
 # created by virtualenv automatically
 test.db
 __pycache__/
+env
