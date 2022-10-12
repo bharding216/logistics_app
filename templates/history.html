@@ -29,6 +29,7 @@
             <th>Volume [gallons]</th>
             <th>Pickup Date [YYYY-MM-DD]</th>
             <th>Pickup Time [24-hr]</th>
+            <th>PO Number</th>
             <th>Date Modified</th>
         </tr>
 
@@ -40,6 +41,7 @@
                 <td>{{ item.volume }}</td>
                 <td>{{ item.pickup_date }}</td>
                 <td>{{ item.pickup_time }}</td>
+                <td>{{ item.PO_number }}</td>
                 <td>{{ item.modified_on.strftime("%Y-%m-%d %H:%M:%S") }}</td>
             </tr>
         {% endfor %}

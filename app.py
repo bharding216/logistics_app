@@ -6,7 +6,7 @@ from datetime import datetime, date
 from sqlalchemy import event, insert
 #--------------------------------------------------------------------
 
-#db setup
+#db schema
 #--------------------------------------------------------------------
 app = Flask (__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
