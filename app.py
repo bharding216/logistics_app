@@ -19,6 +19,12 @@ app.config['MYSQL_USER'] = db['mysql_user']
 app.config['MYSQL_PASSWORD'] = db['mysql_password']
 app.config['MYSQL_DB'] = db['mysql_db']
 
+# For cookies? It keeps the client-side sessions secure.
+# The secret key can be loaded in from the yaml file.
+app.config['SECRET_KEY'] = db['secret_key']
+
+
+
 # Old SQLite db connection:
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 
@@ -29,9 +35,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:' + db['mysql_pass
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://username:password@server/db'
 
 
-# For cookies? It keeps the client-side sessions secure.
-# The secret key can be loaded in from the yaml file.
-# app.config['SECRET_KEY'] = '1234'
+# Initialize the db
 db = SQLAlchemy(app)
 
 
