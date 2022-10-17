@@ -1,17 +1,42 @@
-#import files
+#import modules
 #--------------------------------------------------------------------
 from flask import Flask, render_template, url_for, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime, date
 from sqlalchemy import event, insert
+import yaml
+from flask_mysqldb import MySQL
+import pymysql, cryptography
 #--------------------------------------------------------------------
+
+#db connection
+#--------------------------------------------------------------------
+app = Flask (__name__)
+
+db = yaml.full_load(open('db.yaml'))
+app.config['MYSQL_HOST'] = db['mysql_host']
+app.config['MYSQL_USER'] = db['mysql_user']
+app.config['MYSQL_PASSWORD'] = db['mysql_password']
+app.config['MYSQL_DB'] = db['mysql_db']
+
+# Old SQLite db connection:
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+
+# New MySQL db connection:
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:' + db['mysql_password'] + '@localhost/appointments'
+
+# General format:
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://username:password@server/db'
+
+
+# For cookies? It keeps the client-side sessions secure.
+# The secret key can be loaded in from the yaml file.
+# app.config['SECRET_KEY'] = '1234'
+db = SQLAlchemy(app)
+
 
 #db schema
 #--------------------------------------------------------------------
-app = Flask (__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-db = SQLAlchemy(app)
-
 class appts_db(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     carrier = db.Column(db.String(100), nullable=False)
