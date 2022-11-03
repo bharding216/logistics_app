@@ -11,7 +11,7 @@
             in the 'carriers' column that is passed from the view 
             function and adds all the unique values to the
             dropdown list.-->
-            <label>Choose an existing Carrier:</label><br>
+            <label>Choose a Carrier:</label><br>
             <select name="carrier">
                 {% for carrier in carriers %}
                     <option value = "{{ carrier.carrier_name }}" 
@@ -59,7 +59,7 @@
 
     <div class="create_column">
         <h4>Don't see your carrier in the dropdown menu?</h4>
-        <form action="{{ url_for('new_carrier') }}">
+        <form action="{{ url_for('views.new_carrier') }}">
             <input type="submit" value="Add New Carrier" class="create_edit">
         </form><br>
     </div>

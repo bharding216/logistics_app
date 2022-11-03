@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+
+{% block head %}
+{% endblock %}
+    
+{% block body %}
+    <h3>View Appointments</h3>
+
+    <div class="container">
+        <form action="/" method="GET">
+            <div class="row query-row">
+
+                <!--1st column-->
+                <div class="col query-col">
+                    <div class="form-check">
+                        <b>Select material:</b><br>
+
+                        <input class="form-check-input" type="checkbox" 
+                            value="36% HCl" id="36% HCl" name="material_filter" checked>
+                        <label class="form-check-label" for="36% HCl">36% HCl</label><br>
+                        <!--------------------------------------------------------->
+                        <input class="form-check-input" type="checkbox" 
+                        value="32% HCl" id="32% HCl" name="material_filter"
+                        checked>
+                        <label class="form-check-label" for="32% HCl">
+                            32% HCl</label><br>
+                        <!--------------------------------------------------------->
+                        <input class="form-check-input" type="checkbox" 
+                            name="material_filter" id="15% HCl" value="15% HCl" 
+                            checked>
+                        <label class="form-check-label" for="15% HCl">
+                            15% HCl</label><br>
+                        <!--------------------------------------------------------->
+                        <input class="form-check-input" type="checkbox" 
+                            value="50% Caustic" id="50% Caustic" name="material_filter"
+                            checked>
+                        <label class="form-check-label" for="50% Caustic">
+                            50% Caustic</label><br>
+                        <!--------------------------------------------------------->
+                        <input class="form-check-input" type="checkbox" 
+                            name="material_filter" id="25% Caustic" value="25% Caustic" 
+                            checked>
+                        <label class="form-check-label" 
+                            for="25% Caustic">25% Caustic</label><br>
+                        <!--------------------------------------------------------->
+                        <input class="form-check-input" type="checkbox" 
+                            name="material_filter" id="20% Caustic" value="20% Caustic" 
+                            checked>
+                        <label class="form-check-label"
+                            for="20% Caustic">20% Caustic</label><br>
+                        <!--------------------------------------------------------->
+                        <input class="form-check-input" type="checkbox" 
+                            name="material_filter" id="12.5% Bleach" value="12.5% Bleach" 
+                            checked>
+                        <label class="form-check-label"
+                            for="12.5% Bleach">12.5% Bleach</label><br>
+                        <!--------------------------------------------------------->
+                        <input class="form-check-input" type="checkbox" name="material_filter" 
+                            id="10%_Bleach_filter" value="10% Bleach" 
+                            checked>
+                        <label class="form-check-label"
+                            for="10% Bleach">10% Bleach</label><br>
+                        <!--------------------------------------------------------->
+                        <input class="form-check-input" type="checkbox" 
+                        onclick="toggle(this);" value="select_all" name="select_all" id="selectAll">
+                        <label class="form-check-label"
+                            for="select_all">Select/Deselect All</label><br>
+                        <!--------------------------------------------------------->
+                    </div>
+                </div>
+            
+
+                <!--2nd column-->
+                <div class="col query-col">
+                    <div class="date-input">
+                        <label for="start_date_filter">Choose a start date:</label><br>
+                        <input type="date" id="start_date_filter" name="start_date_filter" 
+                            min="2022-01-01"><br>
+                    </div>
+                    <!--------------------------------------------------------->
+                    <div class="date-input">
+                        <label for="end_date_filter">Choose an end date:</label><br>
+                        <input type="date" id="end_date_filter" name="end_date_filter" 
+                            min="2022-01-01"><br><br>
+                    </div>
+                    <!--------------------------------------------------------->
+                    <div class="time-input">
+                        <label for="start_time_filter">Choose a start time:</label><br>
+                        <input type="time" id="start_time_filter" name="start_time_filter"><br>
+                    </div>
+                    <!--------------------------------------------------------->
+                    <div class="time-input">
+                        <label for="end_time_filter">Choose an end time:</label><br>
+                        <input type="time" id="end_time_filter" name="end_time_filter"><br>
+                    </div>
+                </div>
+            
+
+                <!--3rd column-->
+                <div class="col query-col">
+                    <b>Select a Carrier:</b><br>
+                        <select name="carrier">
+                            <option value = "all">All Carriers</option>
+                            {% for carrier in carriers %}
+                                <option value = "{{ carrier.carrier_name }}">
+                                        {{ carrier.carrier_name }}</option>
+                            {% endfor %}
+                        </select>
+                </div>
+
+
+                <!--4th column-->
+                <div class="col query-col">
+                    <input type="submit" value="View Appointments" 
+                        class="create_edit">
+                </div>
+            
+
+            <!--closes the 'row' <div>-->
+            </div>
+
+
+        </form>
+
+    <!--closes the 'container' <div>-->
+    </div><br>
+
+
+
+
+    <div id="appointment_list">
+        <h3>Appointment List</h3>
+        <table>
+            <tr>
+                <th>Carrier</th>
+                <th>Material</th>
+                <th>Volume [gallons]</th>
+                <th>Pickup Date [YYYY-MM-DD]</th>
+                <th>Pickup Time [24-hr]</th>
+                <th>PO Number</th>
+                <th>Actions</th>
+            </tr>
+
+            {% for appt in appts %}
+                <tr>
+                    <td>{{ appt.carrier }}</td>
+                    <td>{{ appt.material }}</td>
+                    <td>{{ appt.volume }}</td>
+                    <td>{{ appt.pickup_date }}</td>
+                    <td>{{ appt.pickup_time }}</td>
+                    <td>{{ appt.PO_number }}</td>
+                    
+                    {% if user.access_ranking == 3 %}
+                    <td>
+                        <a href="{{ url_for('views.update', id=appt.id) }}" 
+                            class="delete_update_buttons">Update</a>
+                        <a href="{{ url_for('views.delete', id=appt.id) }}"
+                            class="delete_update_buttons" 
+                            onclick="delete_appt_popup()">Delete</a>
+                    </td>
+                    {% else %}
+                    <td>
+                        <a href="" class="delete_update_buttons"
+                            onclick="unauth_popup()">Update</a>
+                        <a href="" class="delete_update_buttons"
+                            onclick="unauth_popup()">Delete</a>
+                    </td>
+                    {% endif %}
+
+
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}
