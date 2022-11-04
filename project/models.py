@@ -1,5 +1,5 @@
 from . import db
-# from the current package (which is 'project')
+# From the current package (which is 'project'),
 # import the db variable
 
 from flask_login import UserMixin

@@ -11,8 +11,10 @@ from werkzeug.security import generate_password_hash, \
 auth = Blueprint("auth", __name__)
 
 
+
 #--------------------------------------------------------------------
 #--------------------------------------------------------------------
+
 
 
 @auth.route("/login", methods=['GET', 'POST'])
@@ -36,23 +38,6 @@ def login():
                 category='error')
 
     return render_template('login.html', user=current_user)
-
-
-
-# @app.route('/login', methods=['GET', 'POST'])
-# def login():
-#     msg=''
-#     if request.method == 'POST':
-#         username = request.form['username']
-#         password = request.form['password']
-        
-#         user = users.query.filter_by(username=username, password=password).first()
-#         if user:
-#             return render_template('home.html')
-#         else:
-#             msg='Incorrect username/password!'
-    
-#     return render_template('index.html', msg=msg)
 
 
 
@@ -96,8 +81,10 @@ def signup():
     return render_template('signup.html', user=current_user)
 
 
+
 #--------------------------------------------------------------------
 #--------------------------------------------------------------------
+
 
 
 @auth.route("/logout")

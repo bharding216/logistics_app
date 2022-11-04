@@ -13,16 +13,15 @@ import pymysql, cryptography
 # New MySQL db connection:
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:' + db['mysql_password'] + '@localhost/appointments'
 
-# General format:
+# General MySQL config format:
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://username:password@server/db'
 
 
-
+# Initialize the db
+# db = SQLAlchemy(app)
 db = SQLAlchemy()
 DB_NAME = 'carbon.db'
 
-# Initialize the db
-# db = SQLAlchemy(app)
 
 def create_app():
     app = Flask(__name__)
@@ -33,7 +32,6 @@ def create_app():
     # app.config['MYSQL_PASSWORD'] = db['mysql_password']
     # app.config['MYSQL_DB'] = db['mysql_db']
 
-    # # For cookies? It keeps the client-side sessions secure.
     # app.config['SECRET_KEY'] = db['secret_key']
 
 
