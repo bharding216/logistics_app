@@ -42,7 +42,10 @@
 
     <h1>CarbonFree Logistics Management System</h1>
 
+    {% if user.is_authenticated %}
     <h4>Logged in as: {{ user.username }}</h4><br>
+    {% endif %}
+
 
     {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}

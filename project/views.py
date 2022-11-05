@@ -5,6 +5,14 @@ from . import db
 
 views = Blueprint("views", __name__)
 
+# When you want to have blueprint-specific 
+# templates and static files:
+
+#views = Blueprint(
+# "views", __name__, 
+# template_folder='templates',
+# static_folder='static'
+# )
 
 #--------------------------------------------------------------------
 #--------------------------------------------------------------------

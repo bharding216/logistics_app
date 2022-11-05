@@ -10,6 +10,15 @@ from werkzeug.security import generate_password_hash, \
 
 auth = Blueprint("auth", __name__)
 
+# When you want to have blueprint-specific 
+# templates and static files:
+
+#auth = Blueprint(
+# "auth", __name__, 
+# template_folder='templates',
+# static_folder='static'
+# )
+
 
 
 #--------------------------------------------------------------------

@@ -1,5 +1,5 @@
 mysql_host: 'localhost'
 mysql_user: 'root'
 mysql_password: 'Monkey216'
-mysql_db: 'appointments'
+mysql_db: 'trucks'
 secret_key: 'ccbeeaf255d42d3214d5'
