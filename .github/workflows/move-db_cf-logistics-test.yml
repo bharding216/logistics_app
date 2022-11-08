@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'cf-logistics-test'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B4B4435CC48844EEAD4F8B8CBD24536B }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3D79A4E3210A4A27864D769870570D59 }}
