@@ -15,20 +15,22 @@ def create_app():
     app = Flask(__name__)
 
     # Application configuration
-    #db = yaml.full_load(open('project/db.yaml'))
-    #app.config['MYSQL_HOST'] = db['mysql_host']
-    #app.config['MYSQL_USER'] = db['mysql_user']
-    #app.config['MYSQL_PASSWORD'] = db['mysql_password']
-    #app.config['MYSQL_DB'] = db['mysql_db']
-    #app.config['SECRET_KEY'] = db['secret_key']
-    app.config['SECRET_KEY'] = 'my key'
+    with open('project/db.yaml', 'r') as file:
+        test = yaml.load(file, Loader=yaml.FullLoader)
+    app.config['MYSQL_HOST'] = test['mysql_host']
+    app.config['MYSQL_USER'] = test['mysql_user']
+    app.config['MYSQL_PASSWORD'] = test['mysql_password']
+    app.config['MYSQL_DB'] = test['mysql_db']
+    app.config['SECRET_KEY'] = test['secret_key']
+    #app.config['SECRET_KEY'] = 'my key'
 
     # Initialize plugins
     db.init_app(app)
     login_manager.init_app(app)
 
-    #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:' + db['mysql_password'] + '@localhost/trucks'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Monkey216@localhost/trucks'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://' + test['mysql_user'] + \
+        ':' + test['mysql_password'] + '@' + test['mysql_host'] + '/' + test['mysql_db']
+    #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Monkey216@localhost/trucks'
 
     # General MySQL config format:
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://username:password@server/db'
