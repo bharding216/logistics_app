@@ -1,10 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from os import path
+#from os import path
 from flask_login import LoginManager
 import yaml
-from flask_mysqldb import MySQL
-import pymysql, cryptography
+#from flask_mysqldb import MySQL
+#import pymysql, cryptography
 
 
 db = SQLAlchemy()

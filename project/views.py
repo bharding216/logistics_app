@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, request, flash, redirect
+from flask import Blueprint, render_template, request, redirect
 from flask_login import login_required, current_user
-from .models import carriers_db, users, appts_db, log_db, carriers_db
+from .models import carriers_db, appts_db, log_db, carriers_db
 from . import db
 
 views = Blueprint("views", __name__)

@@ -1,4 +1,4 @@
-from os import access
+#from os import access
 from flask import Blueprint, render_template, \
     redirect, url_for, request, flash
 from . import db
