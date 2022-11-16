@@ -44,19 +44,33 @@ h1 {
     text-align: center;
 }
 
-/*h3 {
+h2 {
     font-family: Arial Narrow, Helvetica, sans-serif;
-    margin-left: 20px;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
 }
 
+
+/*
 h4 {
     font-family: Arial Narrow, Helvetica, sans-serif;
-}*/
+}
+*/
+
+.logged-in-as {
+    font-family: Arial Narrow, Helvetica, sans-serif;
+    font-size: 14px;
+    text-align: right;
+}
+
 /*---------------------------------------------------*/
 
 
 /*tables*/
 /*---------------------------------------------------*/
+
+/*
 table {
     border: 1px solid;
     border-collapse: collapse;
@@ -64,26 +78,32 @@ table {
     margin-right: auto;
     margin-bottom: 50px;
 }
+*/
 
-th {
+
+thead {
     border: 1px solid;
     text-align: center;
-    padding: 10px;
     background-color: rgb(11, 83, 11);
     color: white;
     font-family: Arial Narrow, Helvetica, sans-serif;
 }
 
-td {
+
+
+tbody {
     border: 1px solid;
     text-align: center;
     padding: 10px;
     font-family: Arial Narrow, Helvetica, sans-serif;
 }
 
+/*
 tr:hover {
     background-color: rgb(249, 255, 251);
 }
+*/
+
 
 .delete_update_buttons {
     color:white;
@@ -129,7 +149,7 @@ tr:hover {
 /*---------------------------------------------------*/
 
 
-
+/*
 .query-col {
     border-left: 6px solid green;
     height: 100%;
@@ -138,6 +158,10 @@ tr:hover {
 .query-row {
     height:300px;
 }
+*/
+
+
+
 
 .form-check-input:checked {
     background-color: green!important;

@@ -4,14 +4,14 @@
 {% endblock %}
     
 {% block body %}
-    <h3>View Appointments</h3>
+    <h2>Filter Appointments</h2>
 
     <div class="container">
         <form action="/" method="GET">
-            <div class="row query-row">
+            <div class="row gy-4">
 
                 <!--1st column-->
-                <div class="col query-col">
+                <div class="col">
                     <div class="form-check">
                         <b>Select material:</b><br>
 
@@ -71,7 +71,7 @@
             
 
                 <!--2nd column-->
-                <div class="col query-col">
+                <div class="col text-center">
                     <div class="date-input">
                         <label for="start_date_filter">Choose a start date:</label><br>
                         <input type="date" id="start_date_filter" name="start_date_filter" 
@@ -97,7 +97,7 @@
             
 
                 <!--3rd column-->
-                <div class="col query-col">
+                <div class="col text-center">
                     <b>Select a Carrier:</b><br>
                         <select name="carrier">
                             <option value = "all">All Carriers</option>
@@ -110,7 +110,7 @@
 
 
                 <!--4th column-->
-                <div class="col query-col">
+                <div class="col text-center">
                     <input type="submit" value="View Appointments" 
                         class="create_edit">
                 </div>
@@ -129,47 +129,103 @@
 
 
     <div id="appointment_list">
-        <h3>Appointment List</h3>
-        <table>
-            <tr>
-                <th>Carrier</th>
-                <th>Material</th>
-                <th>Volume [gallons]</th>
-                <th>Pickup Date [YYYY-MM-DD]</th>
-                <th>Pickup Time [24-hr]</th>
-                <th>PO Number</th>
-                <th>Actions</th>
-            </tr>
+        <h2>Queried Appointments</h2>
 
-            {% for appt in appts %}
+        <div class="table-responsive">
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <th scope="col">Carrier</th>
+                        <th scope="col">Material</th>
+                        <th scope="col">Volume [gallons]</th>
+                        <th scope="col">Pickup Date [YYYY-MM-DD]</th>
+                        <th scope="col">Pickup Time [24-hr]</th>
+                        <th scope="col">PO Number</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+
+
+                <tbody>
+                    {% for appt in appts %}
+                        <tr>
+                            <td class="align-middle">{{ appt.carrier }}</td>
+                            <td class="align-middle">{{ appt.material }}</td>
+                            <td class="align-middle">{{ appt.volume }}</td>
+                            <td class="align-middle">{{ appt.pickup_date }}</td>
+                            <td class="align-middle">{{ appt.pickup_time }}</td>
+                            <td class="align-middle">{{ appt.PO_number }}</td>
+                            
+                            {% if user.access_ranking == 3 %}
+                            
+                            <td class="align-middle">
+                                <a 
+                                    class="btn btn-outline-success my-1" 
+                                    href="{{ url_for('views.update', id=appt.id) }}" 
+                                    role="button">Update
+                                </a>
+
+                                <a 
+                                    class="btn btn-outline-success my-1" 
+                                    href="{{ url_for('views.delete', id=appt.id) }}" 
+                                    onclick="delete_appt_popup()"
+                                    role="button">Delete
+                                </a>
+
+                            </td>
+
+                            
+                            {% else %}
+                            <td>
+                                <a href="" class="delete_update_buttons"
+                                    onclick="unauth_popup()">Update</a>
+                                <a href="" class="delete_update_buttons"
+                                    onclick="unauth_popup()">Delete</a>
+                            </td>
+                            {% endif %}
+
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+    <h2>Query Statistics</h2>
+
+    <div class="table-responsive">
+        <table class="table">
+
+            <thead>
                 <tr>
-                    <td>{{ appt.carrier }}</td>
-                    <td>{{ appt.material }}</td>
-                    <td>{{ appt.volume }}</td>
-                    <td>{{ appt.pickup_date }}</td>
-                    <td>{{ appt.pickup_time }}</td>
-                    <td>{{ appt.PO_number }}</td>
-                    
-                    {% if user.access_ranking == 3 %}
-                    <td>
-                        <a href="{{ url_for('views.update', id=appt.id) }}" 
-                            class="delete_update_buttons">Update</a>
-                        <a href="{{ url_for('views.delete', id=appt.id) }}"
-                            class="delete_update_buttons" 
-                            onclick="delete_appt_popup()">Delete</a>
-                    </td>
-                    {% else %}
-                    <td>
-                        <a href="" class="delete_update_buttons"
-                            onclick="unauth_popup()">Update</a>
-                        <a href="" class="delete_update_buttons"
-                            onclick="unauth_popup()">Delete</a>
-                    </td>
-                    {% endif %}
-
-
+                    <th scope="col">Material</th>
+                    <th scope="col">Total Volume [gallons]</th>
                 </tr>
-            {% endfor %}
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>HCl</td>
+                    <td>{{hcl_query.0}}</td>
+                </tr>
+
+                <tr>
+                    <td>Caustic</td>
+                    <td>{{caustic_query.0}}</td>
+                </tr>
+
+                <tr>
+                    <td>Bleach</td>
+                    <td>{{bleach_query.0}}</td>
+                </tr>
+
+            </tbody>
         </table>
     </div>
 

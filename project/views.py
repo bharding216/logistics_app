@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect
 from flask_login import login_required, current_user
+from sqlalchemy import func, or_
 from .models import carriers_db, appts_db, log_db, carriers_db
 from . import db
 
@@ -95,10 +96,49 @@ def index():
         #to generate the carriers within the dropdown list
         carriers = carriers_db.query.order_by(carriers_db.carrier_name).all()
 
-        return render_template('index.html', 
+        #sum the queried volumes by product
+        hcl_query = db.session.query(func.sum(appts_db.volume)) \
+            .filter(or_(appts_db.material == '36% HCl', \
+            appts_db.material == '32% HCl', \
+            appts_db.material == '15% HCl')).one()
+
+        if hcl_query[0] == None:
+            hcl_list = list(hcl_query)
+            hcl_list[0] = 0
+            hcl_query = tuple(hcl_list)
+
+        caustic_query = db.session.query(func.sum(appts_db.volume)) \
+            .filter(or_(appts_db.material == '50% Caustic', \
+            appts_db.material == '25% Caustic', \
+            appts_db.material == '20% Caustic')).one()
+
+        if caustic_query[0] == None:
+            caustic_list = list(caustic_query)
+            caustic_list[0] = 0
+            caustic_query = tuple(caustic_list)
+
+
+        bleach_query = db.session.query(func.sum(appts_db.volume)) \
+            .filter(or_(appts_db.material == '12.5% Bleach', \
+            appts_db.material == '10% Bleach')).one()
+
+        if bleach_query[0] == None:
+            bleach_list = list(bleach_query)
+            bleach_list[0] = 0
+            bleach_query = tuple(bleach_list)
+
+
+
+
+        return render_template(
+            'index.html', 
             appts=appts, 
             carriers=carriers, 
-            user=current_user)
+            user=current_user,
+            hcl_query=hcl_query,
+            caustic_query=caustic_query,
+            bleach_query=bleach_query
+        )
 
 
 #--------------------------------------------------------------------
@@ -114,7 +154,12 @@ def history():
         query_limit = request.args.get('log')
 
     log = log_db.query.order_by(log_db.id.desc()).limit(query_limit).all()
-    return render_template('history.html', log=log, query_limit=query_limit, user=current_user)
+    return render_template(
+        'history.html', 
+        log=log, 
+        query_limit=query_limit, 
+        user=current_user
+    )
 
 
 #--------------------------------------------------------------------
