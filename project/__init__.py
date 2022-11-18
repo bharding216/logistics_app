@@ -23,6 +23,10 @@ def create_app():
     app.config['MYSQL_DB'] = test['mysql_db']
     app.config['SECRET_KEY'] = test['secret_key']
     #app.config['SECRET_KEY'] = 'my key'
+    app.config['SQLALCHEMY_POOL_RECYCLE'] = 299
+    app.config['SQLALCHEMY_POOL_TIMEOUT'] = 20
+
+
 
     # Initialize plugins
     db.init_app(app)
