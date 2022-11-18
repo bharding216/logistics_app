@@ -112,7 +112,7 @@
                 <!--4th column-->
                 <div class="col text-center">
                     <input type="submit" value="View Appointments" 
-                        class="create_edit">
+                        class="btn btn-outline-success">
                 </div>
             
 
@@ -131,7 +131,7 @@
     <div id="appointment_list">
         <h2>Queried Appointments</h2>
 
-        <div class="table-responsive">
+        <div class="table-responsive mx-5">
             <table class="table">
 
                 <thead>
@@ -174,34 +174,35 @@
                                 </a>
 
                             </td>
-
                             
                             {% else %}
-                            <td>
-                                <a href="" class="delete_update_buttons"
+                            <td class="align-middle">
+                                <a 
+                                    href="" 
+                                    class="btn btn-outline-success my-1"
+                                    role="button"
                                     onclick="unauth_popup()">Update</a>
-                                <a href="" class="delete_update_buttons"
+                                <a 
+                                    href="" 
+                                    class="btn btn-outline-success my-1"
+                                    role="button"
                                     onclick="unauth_popup()">Delete</a>
                             </td>
                             {% endif %}
-
 
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
 
-
         </div>
-
 
     </div>
 
     <h2>Query Statistics</h2>
 
-    <div class="table-responsive">
+    <div class="table-responsive mx-5 mb-5">
         <table class="table">
-
             <thead>
                 <tr>
                     <th scope="col">Material</th>
@@ -209,24 +210,29 @@
                 </tr>
             </thead>
 
-            <tbody>
+            <tbody>          
                 <tr>
                     <td>HCl</td>
-                    <td>{{hcl_query.0}}</td>
+                    <td>{{hcl_volumeList}}</td>
                 </tr>
-
                 <tr>
                     <td>Caustic</td>
-                    <td>{{caustic_query.0}}</td>
+                    <td>{{caustic_volumeList}}</td>
                 </tr>
-
                 <tr>
                     <td>Bleach</td>
-                    <td>{{bleach_query.0}}</td>
+                    <td>{{bleach_volumeList}}</td>
                 </tr>
-
             </tbody>
         </table>
     </div>
+
+<!--refresh this page every 60 seconds-->
+<script>
+setTimeout(function(){
+   window.location.reload(1);
+}, 60000);
+</script>
+
 
 {% endblock %}

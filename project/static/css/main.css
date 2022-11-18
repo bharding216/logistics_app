@@ -62,6 +62,12 @@ h4 {
     font-family: Arial Narrow, Helvetica, sans-serif;
     font-size: 14px;
     text-align: right;
+    padding-right: 5%;
+}
+
+.note {
+    font-family: Arial Narrow, Helvetica, sans-serif;
+    font-size: 14px;  
 }
 
 /*---------------------------------------------------*/
@@ -70,17 +76,6 @@ h4 {
 /*tables*/
 /*---------------------------------------------------*/
 
-/*
-table {
-    border: 1px solid;
-    border-collapse: collapse;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 50px;
-}
-*/
-
-
 thead {
     border: 1px solid;
     text-align: center;
@@ -88,7 +83,6 @@ thead {
     color: white;
     font-family: Arial Narrow, Helvetica, sans-serif;
 }
-
 
 
 tbody {
@@ -102,8 +96,6 @@ tbody {
 tr:hover {
     background-color: rgb(249, 255, 251);
 }
-*/
-
 
 .delete_update_buttons {
     color:white;
@@ -118,6 +110,7 @@ tr:hover {
     background-color: rgb(173, 239, 173);
     color: black;
 }
+*/
 
 /*---------------------------------------------------*/
 
@@ -213,17 +206,20 @@ tr:hover {
 */
 
 
+
 /*
 #appointment_list {
     clear: left;
 }
-*/
 
 .create_column {
     float: left;
     width: 50%;
     margin-top: 20px;
 }
+*/
+
+
 
 /*.form {
     background-color: rgb(221, 253, 221);

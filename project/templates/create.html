@@ -4,65 +4,166 @@
 {% endblock %}
     
 {% block body %}
-    <div class="create_column">
-        <h3>Create a New Appointment:</h3><br>
-        <form action="/" method="POST" onsubmit="create_appt_popup()" class="form">
-            <!--this Jinja for loop goes through each carrier 
-            in the 'carriers' column that is passed from the view 
-            function and adds all the unique values to the
-            dropdown list.-->
-            <label>Choose a Carrier:</label><br>
-            <select name="carrier">
-                {% for carrier in carriers %}
-                    <option value = "{{ carrier.carrier_name }}" 
-                        selected>{{ carrier.carrier_name }}</option>
-                {% endfor %}
-            </select><br><br>
+<h2>Create a New Appointment</h2><br>
 
-            <label for="volume">Requested Volume [gallons]:</label><br>
-            <input type="number" name="volume" id="volume" value="volume"><br><br>
+<div class="container mb-5">
+    <form action="/" method="POST" onsubmit="create_appt_popup()" id="new_appt_form">
+        
+        <div class="row">
+            <div class="col-6 col-sm-6 col-md-6 col-lg-4">
+                <!--This Jinja for loop goes through each carrier 
+                in the 'carriers' column that is passed from the view 
+                function and adds all the unique values to the
+                dropdown list.-->
+                <label><b>Choose a Carrier:</b></label><br>
+                <select name="carrier" class="form-select">
+                    {% for carrier in carriers %}
+                        <option value = "{{ carrier.carrier_name }}" 
+                            selected>{{ carrier.carrier_name }}</option>
+                    {% endfor %}
+                </select>
+                <p class="note">Don't see your carrier in the dropdown menu?</p>
+                <a
+                    href="{{ url_for('views.new_carrier') }}"
+                    class="btn btn-outline-success"
+                    role="button">Create New Carrier
+                </a>
+            </div>
+        </div><br>
 
-            <label>Select a product:</label><br>
-            <p>HCl:</p>
-            <input type="radio" name="material" id="36%_HCl" value="36% HCl">
-            <label for="36% HCl">36% HCl</label><br>
-            <input type="radio" name="material" id="32%_HCl" value="32% HCl">
-            <label for="32% HCl">32% HCl</label><br>
-            <input type="radio" name="material" id="15%_HCl" value="15% HCl">
-            <label for="15% HCl">15% HCl</label><br>
-            <p>Caustic:</p>
-            <input type="radio" name="material" id="50%_Caustic" value="50% Caustic">
-            <label for="50% Caustic">50% Caustic</label><br>
-            <input type="radio" name="material" id="25%_Caustic" value="25% Caustic">
-            <label for="25% Caustic">25% Caustic</label><br>
-            <input type="radio" name="material" id="20%_Caustic" value="20% Caustic">
-            <label for="20% Caustic">20% Caustic</label><br>
-            <p>Bleach:</p>
-            <input type="radio" name="material" id="12.5%_Bleach" value="12.5% Bleach">
-            <label for="12.5% Bleach">12.5% Bleach</label><br>
-            <input type="radio" name="material" id="10%_Bleach" value="10% Bleach">
-            <label for="10% Bleach">10% Bleach</label><br><br>
-            
-            <label for="pickup_date">Pickup Date:</label>
-            <input type="date" id="pickup_date" name="pickup_date"><br><br>
-            <label for="pickup_time">Pickup Time:</label>
-            <input type="time" id="pickup_time" name="pickup_time"><br><br>
 
-            <label for="PO_number">PO Number:</label>
-            <input type="text" id="PO_number" name="PO_number" 
-                placeholder="PO-xxxxx"><br><br>
-            
-            <input type="submit" id="create_appt" value="Submit" class="create_edit">
 
-        </form><br><br>
-    </div>
+        <div class="row">
+            <div class="col-6 col-sm-6 col-md-6 col-lg-4">
+                <label for="volume"><b>Requested Volume [gallons]:</b></label><br>
+                <input class="form-control" type="number" name="volume" id="volume" value="volume">
+            </div>
+        </div><br>
 
-    <div class="create_column">
-        <h4>Don't see your carrier in the dropdown menu?</h4>
-        <form action="{{ url_for('views.new_carrier') }}">
-            <input type="submit" value="Add New Carrier" class="create_edit">
-        </form><br>
-    </div>
+
+
+
+
+
+        <div class="row">
+            <p><b>Select a product:</b></p>
+
+            <div class="col-sm-4 col-md-3 col-lg-2">
+
+                <p>HCl:</p>
+                <div class="form-check">
+                    <input 
+                        class="form-check-input" 
+                        type="radio" 
+                        name="material" 
+                        id="36%_HCl" 
+                        value="36% HCl">
+                    <label 
+                        class="form-check-label"
+                        for="36% HCl">36% HCl</label>
+                </div>
+
+                <div class="form-check">
+                    <input 
+                        class="form-check-input" 
+                        type="radio" 
+                        name="material" 
+                        id="32%_HCl" 
+                        value="32% HCl">
+                    <label 
+                        class="form-check-label"
+                        for="32% HCl">32% HCl</label>
+                </div>                        
+
+                <div class="form-check">
+                    <input 
+                        class="form-check-input" 
+                        type="radio" 
+                        name="material" 
+                        id="15%_HCl" 
+                        value="15% HCl">
+                    <label 
+                        class="form-check-label"
+                        for="15% HCl">15% HCl</label>
+                </div>
+
+            </div>
+
+            <div class="col-sm-4 col-md-3 col-lg-2">
+
+                <p>Caustic:</p>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="material" id="50%_Caustic" value="50% Caustic">
+                    <label for="50% Caustic">50% Caustic</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="material" id="25%_Caustic" value="25% Caustic">
+                    <label for="25% Caustic">25% Caustic</label>
+                </div>
+
+                <div class="form-check">  
+                    <input class="form-check-input" type="radio" name="material" id="20%_Caustic" value="20% Caustic">
+                    <label for="20% Caustic">20% Caustic</label>
+                </div>
+
+            </div>
+
+            <div class="col-sm-4 col-md-3 col-lg-2">
+
+                <p>Bleach:</p>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="material" id="12.5%_Bleach" value="12.5% Bleach">
+                    <label for="12.5% Bleach">12.5% Bleach</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="material" id="10%_Bleach" value="10% Bleach">
+                    <label for="10% Bleach">10% Bleach</label>
+                </div>
+
+            </div>
+
+        </div><br>
+
+
+        <div class="row">
+            <div class="col-8 col-sm-6 col-md-6 col-lg-4">
+                <label for="pickup_date"><b>Pickup Date:</b></label>
+                <input type="date" id="pickup_date" name="pickup_date">
+            </div>
+        </div><br>
+
+        <div class="row">
+            <div class="col-6 col-sm-6 col-md-6 col-lg-4">
+                <label for="pickup_time"><b>Pickup Time:</b></label>
+                <input type="time" id="pickup_time" name="pickup_time">
+            </div>
+        </div><br>
+
+
+        <div class="row">
+            <div class="col-6 col-sm-6 col-md-6 col-lg-4">
+                <label for="PO_number"><b>PO Number:</b></label>
+                <input type="text" id="PO_number" name="PO_number" 
+                    placeholder="PO-xxxxx" class="form-control">
+            </div>
+        </div><br>
+
+
+
+        <button
+            type="submit"  
+            form="new_appt_form"
+            value="Submit" 
+            class="btn btn-outline-success">Submit</button>
+        </button> 
+
+    </form>
+
+</div>
+
 
 
 

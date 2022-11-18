@@ -32,6 +32,8 @@ def index():
         pickup_time_input = request.form['pickup_time']
         PO_number = request.form['PO_number']
         
+        # Create a variable to store the appt details
+        # to be used for the main appts db table.
         new_appt = appts_db(
             carrier=carrier_name, 
             volume=requested_volume,
@@ -41,6 +43,8 @@ def index():
             PO_number=PO_number
         )
         
+        # Create a variable to store the appt details
+        # to be used for the change log db table.
         create_new_log = log_db(
             action="Created",
             carrier=carrier_name, 
@@ -96,38 +100,62 @@ def index():
         #to generate the carriers within the dropdown list
         carriers = carriers_db.query.order_by(carriers_db.carrier_name).all()
 
+############################################################################
         #sum the queried volumes by product
-        hcl_query = db.session.query(func.sum(appts_db.volume)) \
-            .filter(or_(appts_db.material == '36% HCl', \
-            appts_db.material == '32% HCl', \
-            appts_db.material == '15% HCl')).one()
 
-        if hcl_query[0] == None:
-            hcl_list = list(hcl_query)
-            hcl_list[0] = 0
-            hcl_query = tuple(hcl_list)
+        hcl_volumeList = []
+        for appt in appts:
+            if appt.material == '36% HCl' or \
+            appt.material == '32% HCl' or \
+            appt.material == '15% HCl':
+                hcl_volumeList.append(appt.volume)
+        hcl_volumeList = sum(hcl_volumeList)
 
-        caustic_query = db.session.query(func.sum(appts_db.volume)) \
-            .filter(or_(appts_db.material == '50% Caustic', \
-            appts_db.material == '25% Caustic', \
-            appts_db.material == '20% Caustic')).one()
+        caustic_volumeList = []
+        for appt in appts:
+            if appt.material == '50% Caustic' or \
+            appt.material == '25% Caustic' or \
+            appt.material == '20% Caustic':
+                caustic_volumeList.append(appt.volume)
+        caustic_volumeList = sum(caustic_volumeList)
 
-        if caustic_query[0] == None:
-            caustic_list = list(caustic_query)
-            caustic_list[0] = 0
-            caustic_query = tuple(caustic_list)
-
-
-        bleach_query = db.session.query(func.sum(appts_db.volume)) \
-            .filter(or_(appts_db.material == '12.5% Bleach', \
-            appts_db.material == '10% Bleach')).one()
-
-        if bleach_query[0] == None:
-            bleach_list = list(bleach_query)
-            bleach_list[0] = 0
-            bleach_query = tuple(bleach_list)
+        bleach_volumeList = []
+        for appt in appts:
+            if appt.material == '12.5% Bleach' or \
+            appt.material == '10% Bleach':
+                bleach_volumeList.append(appt.volume)
+        bleach_volumeList = sum(bleach_volumeList)
 
 
+        # hcl_query = db.session.query(func.sum(appts_db.volume)) \
+        #     .filter(or_(appts_db.material == '36% HCl', \
+        #     appts_db.material == '32% HCl', \
+        #     appts_db.material == '15% HCl')).one()
+
+        # if hcl_query[0] == None:
+        #     hcl_list = list(hcl_query)
+        #     hcl_list[0] = 0
+        #     hcl_query = tuple(hcl_list)
+
+        # caustic_query = db.session.query(func.sum(appts_db.volume)) \
+        #     .filter(or_(appts_db.material == '50% Caustic', \
+        #     appts_db.material == '25% Caustic', \
+        #     appts_db.material == '20% Caustic')).one()
+
+        # if caustic_query[0] == None:
+        #     caustic_list = list(caustic_query)
+        #     caustic_list[0] = 0
+        #     caustic_query = tuple(caustic_list)
+
+        # bleach_query = db.session.query(func.sum(appts_db.volume)) \
+        #     .filter(or_(appts_db.material == '12.5% Bleach', \
+        #     appts_db.material == '10% Bleach')).one()
+
+        # if bleach_query[0] == None:
+        #     bleach_list = list(bleach_query)
+        #     bleach_list[0] = 0
+        #     bleach_query = tuple(bleach_list)
+############################################################################
 
 
         return render_template(
@@ -135,9 +163,10 @@ def index():
             appts=appts, 
             carriers=carriers, 
             user=current_user,
-            hcl_query=hcl_query,
-            caustic_query=caustic_query,
-            bleach_query=bleach_query
+            hcl_volumeList=hcl_volumeList,
+            caustic_volumeList=caustic_volumeList,
+            bleach_volumeList=bleach_volumeList
+            # bleach_query=bleach_query
         )
 
 

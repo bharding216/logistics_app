@@ -4,48 +4,77 @@
 {% endblock %}
     
 {% block body %}
-<form class="form">
-    <label for="log">Number of change log entries to query:</label>
-    <select name="log" id="log_query">
-        <option value="10" 
-        {% if query_limit == "10" %} selected {% endif %}>10</option>
-        <option value="25" 
-        {% if query_limit == "25" %} selected {% endif %}>25</option>
-        <option value="50" 
-        {% if query_limit == "50" %} selected {% endif %}>50</option>
-        <option value="100" 
-        {% if query_limit == "100" %} selected {% endif %}>100</option>
-    </select><br><br>
-    <input type="submit" value="Update View" class="create_edit">
-</form>
 
-<div id="change_log">
-    <h3>Appointment Change Log</h3>
-    <table>
-        <tr>
-            <th>Action</th>
-            <th>Carrier</th>
-            <th>Material</th>
-            <th>Volume [gallons]</th>
-            <th>Pickup Date [YYYY-MM-DD]</th>
-            <th>Pickup Time [24-hr]</th>
-            <th>PO Number</th>
-            <th>Date Modified</th>
-        </tr>
+<div class="container ml-5">
+    <form class="form">
 
-        {% for item in log %}
+        <div class="row pb-3">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="log">Number of records to query:</label>
+                <select name="log" id="log_query">
+                    <option value="10" 
+                    {% if query_limit == "10" %} selected {% endif %}>10</option>
+                    <option value="25" 
+                    {% if query_limit == "25" %} selected {% endif %}>25</option>
+                    <option value="50" 
+                    {% if query_limit == "50" %} selected {% endif %}>50</option>
+                    <option value="100" 
+                    {% if query_limit == "100" %} selected {% endif %}>100</option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-6 col-sm-6 col-md-4 col-lg-4">
+                <input type="submit" value="Run Query" class="btn btn-outline-success">
+            </div>
+        </div>
+
+
+    </form>
+
+
+</div>
+
+
+
+
+<h2>Appointment Change Log</h2>
+
+
+<div class="table-responsive mx-5 mb-5">
+    <table class="table">
+        <thead>
             <tr>
-                <td>{{ item.action }}</td>
-                <td>{{ item.carrier }}</td>
-                <td>{{ item.material }}</td>
-                <td>{{ item.volume }}</td>
-                <td>{{ item.pickup_date }}</td>
-                <td>{{ item.pickup_time }}</td>
-                <td>{{ item.PO_number }}</td>
-                <td>{{ item.modified_on.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                <th scope="col">Action</th>
+                <th scope="col">Carrier</th>
+                <th scope="col">Material</th>
+                <th scope="col">Volume [gallons]</th>
+                <th scope="col">Pickup Date [YYYY-MM-DD]</th>
+                <th scope="col">Pickup Time [24-hr]</th>
+                <th scope="col">PO Number</th>
+                <th scope="col">Date Modified</th>
             </tr>
-        {% endfor %}
+        </thead>
+
+        <tbody>
+            {% for item in log %}
+                <tr>
+                    <td>{{ item.action }}</td>
+                    <td>{{ item.carrier }}</td>
+                    <td>{{ item.material }}</td>
+                    <td>{{ item.volume }}</td>
+                    <td>{{ item.pickup_date }}</td>
+                    <td>{{ item.pickup_time }}</td>
+                    <td>{{ item.PO_number }}</td>
+                    <td>{{ item.modified_on.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
 
     </table>
+
 </div>
+
 {% endblock %}
