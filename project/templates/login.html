@@ -5,26 +5,48 @@
 
 {% block body %}
 
-<form method="POST">
+<div class="container">
 
-    <h3>Login</h3>
+    <form method="POST">
 
-    <!--the mb-# refers to the number of breaks after the div-->
-    <!--placeholder attribute refers to the text within the input field-->
-    <div class="form-floating mb-3">
-        <input type="text" id="username" placeholder="Username"
-            class="form-control" name="username">
-        <label for="username">Username</label>
-    </div>
+        <h3>Login</h3>
 
-    <div class="form-floating mb-3">
-        <input type="password" id="password" placeholder="Password"
-            class="form-control" name="password">
-        <label for="password">Password</label>
-    </div>
 
-    <button type="submit" class="btn btn-outline-success">Login</button>
+        <!--the mb-# refers to the number of breaks after the div-->
+        <!--placeholder attribute refers to the text within the input field-->
 
-</form>
+
+
+        <div class="form-floating mb-3">
+            <input type="text" id="username" placeholder="Username"
+                class="form-control" name="username">
+            <label for="username">Username</label>
+        </div>
+
+        
+        <!--
+        <div class="form-floating mb-3">
+            <input type="text" id="test" placeholder="test"
+                class="form-control" name="test">
+            <label for="test">test</label>
+        </div>
+        -->
+
+
+        <div class="form-floating mb-3">
+            <input type="password" id="password" placeholder="Password"
+                class="form-control" name="password">
+            <label for="password">Password</label>
+        </div>
+
+
+
+        <button type="submit" class="btn btn-outline-success">Login</button>
+
+
+    </form>
+
+</div>
+
 
 {% endblock %}

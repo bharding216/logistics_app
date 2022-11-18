@@ -43,17 +43,18 @@
     <h1>CarbonFree Logistics Management System</h1>
 
     {% if user.is_authenticated %}
-    <p class="logged-in-as">Logged in as: <b>{{ user.username }}</b></p><br>
+    <p class="logged-in-as">Logged in as: <b>{{ user.username }}</b></p>
     {% endif %}
 
 
-    {% with messages = get_flashed_messages(with_categories=True) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                {{ message }}
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {{ message }}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
 <br>
 
     {% block body %}

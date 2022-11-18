@@ -5,36 +5,43 @@
 
 {% block body %}
 
-<form method="POST">
+<div class="container">
 
-    <h3>Signup</h3>
+    <form method="POST">
 
-    <div class="form-floating mb-3">
-        <input type="email" id="email" name="email" class="form-control"
-            placeholder="Email Address">
-        <label for="email">Email Address</label>
-    </div>
+        <h3>Signup</h3>
 
-    <div class="form-floating mb-3">
-        <input type="text" id="username_signup" name="username_signup" 
-            class="form-control" placeholder="Username">
-        <label for="username_signup">Username</label>
-    </div>
+        <div class="form-floating mb-3">
+            <input type="email" id="email" name="email" class="form-control"
+                placeholder="Email Address">
+            <label for="email">Email Address</label>
+        </div>
 
-    <div class="form-floating mb-3">
-        <input type="password" id="password1" name="password1" 
-            class="form-control" placeholder="Password">
-        <label for="password1">Password</label>
-    </div>
+        <div class="form-floating mb-3">
+            <input type="text" id="username_signup" name="username_signup" 
+                class="form-control" placeholder="Username">
+            <label for="username_signup">Username</label>
+        </div>
 
-    <div class="form-floating mb-3">
-        <input type="password" id="password2" name="password2" 
-            class="form-control" placeholder="Re-enter Password">
-        <label for="password2">Re-enter Password</label>
-    </div>
+        <div class="form-floating mb-3">
+            <input type="password" id="password1" name="password1" 
+                class="form-control" placeholder="Password">
+            <label for="password1">Password</label>
+        </div>
 
-    <button type="submit" class="btn btn-outline-success">Create Account</button>
+        <div class="form-floating mb-3">
+            <input type="password" id="password2" name="password2" 
+                class="form-control" placeholder="Re-enter Password">
+            <label for="password2">Re-enter Password</label>
+        </div>
 
-</form>
+        <button type="submit" class="btn btn-outline-success">Create Account</button>
+
+    </form>
+
+
+</div>
+
+
 
 {% endblock %}

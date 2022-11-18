@@ -23,7 +23,13 @@ def create_app():
     app.config['MYSQL_DB'] = test['mysql_db']
     app.config['SECRET_KEY'] = test['secret_key']
     #app.config['SECRET_KEY'] = 'my key'
-    app.config['SQLALCHEMY_POOL_RECYCLE'] = 299
+
+    # Number of seconds after which a connection is 
+    # automatically recycled. This is required for MySQL.
+    app.config['SQLALCHEMY_POOL_RECYCLE'] = 3600
+
+    # Specifies the connection timeout in seconds 
+    # for the pool.
     app.config['SQLALCHEMY_POOL_TIMEOUT'] = 20
 
 
