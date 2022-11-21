@@ -5,7 +5,7 @@
     display: block;
 }
 
-/*base.html link header*/
+/*base.html navbar*/
 /*---------------------------------------------------*/
 ul {
     list-style-type: none;
@@ -52,11 +52,26 @@ h2 {
 }
 
 
-/*
+h3 {
+    font-family: Arial Narrow, Helvetica, sans-serif;
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+}
+
 h4 {
     font-family: Arial Narrow, Helvetica, sans-serif;
+    text-align: left;
+    font-size: 18px;
+    font-weight: bold;
 }
-*/
+
+label {
+    font-family: Arial Narrow, Helvetica, sans-serif;
+    text-align: left;
+    font-size: 18px;
+}
+
 
 .logged-in-as {
     font-family: Arial Narrow, Helvetica, sans-serif;
@@ -68,6 +83,11 @@ h4 {
 .note {
     font-family: Arial Narrow, Helvetica, sans-serif;
     font-size: 14px;  
+}
+
+.list_heading {
+    font-family: Arial Narrow, Helvetica, sans-serif;
+    font-size: 18px;
 }
 
 /*---------------------------------------------------*/
@@ -115,8 +135,10 @@ tr:hover {
 /*---------------------------------------------------*/
 
 
-/*submit/query buttons*/
+/*update/delete buttons*/
 /*---------------------------------------------------*/
+
+/*
 .create_edit {
     background-color: rgb(2, 81, 2);
     color: white;
@@ -135,6 +157,8 @@ tr:hover {
     background-color: rgb(173, 239, 173);
     color: black;
 }
+*/
+
 /*---------------------------------------------------*/
 
 

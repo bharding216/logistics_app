@@ -7,7 +7,10 @@
 <h2>Create a New Appointment</h2><br>
 
 <div class="container mb-5">
-    <form action="/" method="POST" onsubmit="create_appt_popup()" id="new_appt_form">
+    <form action="/" 
+        method="POST" 
+        onsubmit="create_appt_popup()" 
+        id="new_appt_form">
         
         <div class="row">
             <div class="col-6 col-sm-6 col-md-6 col-lg-4">
@@ -22,6 +25,7 @@
                             selected>{{ carrier.carrier_name }}</option>
                     {% endfor %}
                 </select>
+                
                 <p class="note">Don't see your carrier in the dropdown menu?</p>
                 <a
                     href="{{ url_for('views.new_carrier') }}"
@@ -36,7 +40,11 @@
         <div class="row">
             <div class="col-6 col-sm-6 col-md-6 col-lg-4">
                 <label for="volume"><b>Requested Volume [gallons]:</b></label><br>
-                <input class="form-control" type="number" name="volume" id="volume" value="volume">
+                <input class="form-control" 
+                    type="number" 
+                    name="volume" 
+                    id="volume" 
+                    value="volume">
             </div>
         </div><br>
 
