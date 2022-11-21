@@ -6,13 +6,17 @@ import yaml
 #from flask_mysqldb import MySQL
 #import pymysql, cryptography
 
-
 db = SQLAlchemy()
+
+# The most important part of the app. 
+# This contains the code that lets the
+# application and Flask-Login work together.
 login_manager = LoginManager()
 
 
 def create_app():
     app = Flask(__name__)
+
 
     # Application configuration
     with open('project/db.yaml', 'r') as file:
@@ -24,20 +28,6 @@ def create_app():
     app.config['SECRET_KEY'] = test['secret_key']
     #app.config['SECRET_KEY'] = 'my key'
 
-    # Number of seconds after which a connection is 
-    # automatically recycled. This is required for MySQL.
-    app.config['SQLALCHEMY_POOL_RECYCLE'] = 3600
-
-    # Specifies the connection timeout in seconds 
-    # for the pool.
-    app.config['SQLALCHEMY_POOL_TIMEOUT'] = 20
-
-
-
-    # Initialize plugins
-    db.init_app(app)
-    login_manager.init_app(app)
-
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://' + test['mysql_user'] + \
         ':' + test['mysql_password'] + '@' + test['mysql_host'] + '/' + test['mysql_db']
     #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Monkey216@localhost/trucks'
@@ -45,6 +35,23 @@ def create_app():
 
     # General MySQL config format:
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://username:password@server/db'
+
+
+    # Number of seconds after which a connection is 
+    # automatically recycled. This is required for MySQL.
+    app.config['SQLALCHEMY_POOL_RECYCLE'] = 30
+
+    # Specifies the connection timeout in seconds 
+    # for the pool.
+    app.config['SQLALCHEMY_POOL_TIMEOUT'] = 60
+
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+
+
+
+    # Initialize plugins
+    db.init_app(app)
 
     with app.app_context():
         from .views import views
@@ -60,6 +67,8 @@ def create_app():
         # If the user is not logged in, redirect 
         # them to 'login.html'.
         login_manager.login_view = "auth.login"
+        login_manager.init_app(app)
+
 
         @login_manager.user_loader
         def load_user(id):
