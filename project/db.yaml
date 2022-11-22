@@ -1,0 +1,14 @@
+# Credentials for Heroku-deployed db:
+mysql_host: 'us-cdbr-east-06.cleardb.net'
+mysql_user: 'b20a755d41da08'
+mysql_password: 'd24816b8'
+mysql_db: 'heroku_87bfe77cab779fc'
+secret_key: 'ccbeeaf255d42d3214d5'
+
+
+# Credentials for locally hosted db for testing:
+# mysql_host: 'localhost'
+# mysql_user: 'root'
+# mysql_password: 'Monkey216'
+# mysql_db: 'trucks'
+# secret_key: 'ccbeeaf255d42d3214d5'
