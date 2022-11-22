@@ -28,13 +28,18 @@ def create_app():
     app.config['SECRET_KEY'] = test['secret_key']
     #app.config['SECRET_KEY'] = 'my key'
 
+    # IMPORTANT: The URI declaration must come before you initialize the db
+    # (see d.init_app(app) below).
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://' + test['mysql_user'] + \
         ':' + test['mysql_password'] + '@' + test['mysql_host'] + '/' + test['mysql_db']
-    #app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Monkey216@localhost/trucks'
-    #[DB_TYPE]+[DB_CONNECTOR]://[USERNAME]:[PASSWORD]@[HOST]:[PORT]/[DB_NAME]
+    
 
     # General MySQL config format:
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://username:password@server/db'
+    # app.config['SQLALCHEMY_DATABASE_URI'] = '[DB_TYPE]+[DB_CONNECTOR]://[USERNAME]:[PASSWORD]@[HOST]:[PORT]/[DB_NAME]'
+
+    # Old SQLite db connection:
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///carbon.db'
 
 
     # Number of seconds after which a connection is 
@@ -46,7 +51,6 @@ def create_app():
     app.config['SQLALCHEMY_POOL_TIMEOUT'] = 60
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 
 
 
@@ -77,6 +81,6 @@ def create_app():
         return app
 
 
-#def create_database(app):
-#    if not path.exists("project/" + DB_NAME):
-#        db.create_all(app=app)
+# When using SQLite, remember to using the 
+# db.create_all() command from the command prompt
+# when creating your database file for the first time.
