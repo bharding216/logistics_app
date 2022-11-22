@@ -18,7 +18,8 @@ def create_app():
     app = Flask(__name__)
 
 
-    # Application configuration
+    # Application configuration. This is how you connect
+    # to the remote MySQL database.
     with open('project/db.yaml', 'r') as file:
         test = yaml.load(file, Loader=yaml.FullLoader)
     app.config['MYSQL_HOST'] = test['mysql_host']
