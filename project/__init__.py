@@ -38,6 +38,7 @@ def create_app():
         ':' + test['mysql_password'] + '@' + test['mysql_host'] + '/' + test['mysql_db']
     
 
+
     # General MySQL config format:
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://username:password@server/db'
     # app.config['SQLALCHEMY_DATABASE_URI'] = '[DB_TYPE]+[DB_CONNECTOR]://[USERNAME]:[PASSWORD]@[HOST]:[PORT]/[DB_NAME]'
