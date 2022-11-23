@@ -70,11 +70,14 @@ def create_app():
         app.register_blueprint(auth, url_prefix="/")
 
         # Create database models
+        
         db.create_all()
 
         # If the user is not logged in, redirect 
         # them to 'login.html'.
         login_manager.login_view = "auth.login"
+        login_manager.login_message = "Hi there! Please log in to continue"
+        login_manager.login_message_category = "error"
         login_manager.init_app(app)
 
 
