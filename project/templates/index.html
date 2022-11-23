@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 
 {% block head %}
+<!--refresh the page each minute (time in seconds)-->
+<meta http-equiv="refresh" content="120">
 {% endblock %}
     
 {% block body %}
@@ -227,12 +229,15 @@
         </table>
     </div>
 
-<!--refresh this page every 60 seconds-->
+<!--refresh the page at some specified interval, 
+    time in milliseconds.
+    1 second = 1,000 milliseconds
+    1 minute = 60,000 milliseconds
 <script>
 setTimeout(function(){
    window.location.reload(1);
-}, 60000);
+}, 120000);
 </script>
-
+-->
 
 {% endblock %}

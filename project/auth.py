@@ -1,12 +1,14 @@
 #from os import access
 from flask import Blueprint, render_template, \
-    redirect, url_for, request, flash
+    redirect, url_for, request, flash, session
 from . import db
 from .models import users
 from flask_login import login_user, logout_user, \
     login_required, current_user
 from werkzeug.security import generate_password_hash, \
     check_password_hash
+from datetime import timedelta
+
 
 auth = Blueprint("auth", __name__)
 
@@ -36,7 +38,10 @@ def login():
         if user:
             if check_password_hash(user.password, password):
                 flash('Successfully logged in!', category='success')
-                login_user(user, remember=True)
+                login_user(user, remember=False)
+                # Documentation on login_user:
+                # https://stackoverflow.com/questions/27965897/why-does-setting-remember-false-still-keep-me-logged-in
+                session.permanent = True
                 return redirect(url_for('views.index'))
             else:
                 flash('Password is incorrect. Please try again.', 
@@ -102,13 +107,6 @@ def logout():
     logout_user()
     flash('User logged out!', category='success')
     return redirect(url_for('auth.login'))
-
-
-
-#--------------------------------------------------------------------
-#--------------------------------------------------------------------
-
-
 
 
 

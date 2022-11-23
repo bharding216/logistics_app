@@ -336,3 +336,13 @@ def new_carrier():
 #--------------------------------------------------------------------
 
 
+# @views.before_request
+# def views_inactivity_logout():
+#     session.permanent = True
+#     views.permanent_session_lifetime = timedelta(minutes=1)
+#     #session.modified = True
+#     #g.user = current_user
+
+
+#--------------------------------------------------------------------
+#--------------------------------------------------------------------

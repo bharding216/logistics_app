@@ -5,7 +5,9 @@ from flask_login import LoginManager
 import yaml
 #from flask_mysqldb import MySQL
 #import pymysql, cryptography
+from datetime import timedelta
 
+# Create the "db" object.
 db = SQLAlchemy()
 
 # The most important part of the app. 
@@ -28,6 +30,7 @@ def create_app():
     app.config['MYSQL_DB'] = test['mysql_db']
     app.config['SECRET_KEY'] = test['secret_key']
     #app.config['SECRET_KEY'] = 'my key'
+    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
 
     # IMPORTANT: The URI declaration must come before you initialize the db
     # (see d.init_app(app) below).
