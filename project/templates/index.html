@@ -144,6 +144,7 @@
                         <th scope="col">Pickup Date [YYYY-MM-DD]</th>
                         <th scope="col">Pickup Time [24-hr]</th>
                         <th scope="col">PO Number</th>
+                        <th scope="col">Completed?</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -158,7 +159,19 @@
                             <td class="align-middle">{{ appt.pickup_date }}</td>
                             <td class="align-middle">{{ appt.pickup_time }}</td>
                             <td class="align-middle">{{ appt.PO_number }}</td>
-                            
+                            <td class="align-middle"><input type="checkbox" 
+                                class="form-check-input">
+                                
+                                <br>
+                                <a 
+                                class="btn btn-outline-success my-1" 
+                                href="" 
+                                onclick=""
+                                role="button">Submit</a>   
+
+                            </td>
+
+
                             {% if user.access_ranking == 3 %}
                             
                             <td class="align-middle">
@@ -169,7 +182,7 @@
                                 </a>
 
                                 <a 
-                                    class="btn btn-outline-success my-1" 
+                                    class="btn btn-outline-danger my-1" 
                                     href="{{ url_for('views.delete', id=appt.id) }}" 
                                     onclick="delete_appt_popup()"
                                     role="button">Delete
@@ -177,6 +190,7 @@
 
                             </td>
                             
+
                             {% else %}
                             <td class="align-middle">
                                 <a 

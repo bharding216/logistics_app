@@ -2,7 +2,8 @@ from flask import Blueprint, render_template, request, redirect
 from flask_login import login_required, current_user
 from sqlalchemy import func, or_
 from .models import carriers_db, appts_db, log_db, carriers_db
-from . import db
+from . import db, mail
+from flask_mail import Message
 
 views = Blueprint("views", __name__)
 
@@ -156,6 +157,7 @@ def index():
         #     bleach_list[0] = 0
         #     bleach_query = tuple(bleach_list)
 ############################################################################
+
 
 
         return render_template(

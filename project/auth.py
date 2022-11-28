@@ -1,7 +1,8 @@
 #from os import access
 from flask import Blueprint, render_template, \
     redirect, url_for, request, flash, session
-from . import db
+from flask_mail import Message
+from . import db, mail
 from .models import users
 from flask_login import login_user, logout_user, \
     login_required, current_user
@@ -81,15 +82,22 @@ def signup():
         elif password1 != password2:
             flash('Passwords do not match.', category='error')
         else:
-            new_user = users(email=email, username=username, 
-                password=generate_password_hash(password1, 
-                method='sha256'), access_ranking=access_ranking)
-            db.session.add(new_user)
-            db.session.commit()
-            login_user(new_user, remember=True)
-            flash('User created!', category='success')
+            flash("Thanks for signing up! We'll get back to you \
+                via email once we create your account.", 
+                category='success')
+            
+            # Signup email code:
+            msg = Message('New User Signup', 
+                sender = 'hello@carbonfree.dev', 
+                recipients = ['bharding@carbonfree.cc'])
+            msg.html = render_template('email.html', email=email,
+                username=username, password=password1)
+            mail.send(msg)  
+            
+            
             # Redirect the logged in user to 'index.html':
             return redirect(url_for('views.index'))
+
 
     return render_template('signup.html', user=current_user)
 
@@ -105,6 +113,7 @@ def signup():
 def logout():
     logout_user()
     flash('User logged out!', category='success')
+
     return redirect(url_for('auth.login'))
 
 

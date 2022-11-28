@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 #from os import path
 from flask_login import LoginManager
@@ -10,15 +11,17 @@ from datetime import timedelta
 # Create the "db" object.
 db = SQLAlchemy()
 
+
 # The most important part of the app. 
 # This contains the code that lets the
 # application and Flask-Login work together.
 login_manager = LoginManager()
 
+mail = Mail()
+
 
 def create_app():
     app = Flask(__name__)
-
 
     # Application configuration. This is how you connect
     # to the remote MySQL database.
@@ -31,6 +34,19 @@ def create_app():
     app.config['SECRET_KEY'] = test['secret_key']
     #app.config['SECRET_KEY'] = 'my key'
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=30)
+
+    
+
+    # Mail config settings:
+    app.config['MAIL_SERVER']='send.smtp.mailtrap.io'
+    app.config['MAIL_PORT'] = 587
+    app.config['MAIL_USERNAME'] = 'api'
+    app.config['MAIL_PASSWORD'] = test['mail_password']
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USE_SSL'] = False
+
+
+
 
     # IMPORTANT: The URI declaration must come before you initialize the db
     # (see d.init_app(app) below).
@@ -61,6 +77,8 @@ def create_app():
 
     # Initialize plugins
     db.init_app(app)
+    mail.init_app(app)
+    
 
     with app.app_context():
         from .views import views
