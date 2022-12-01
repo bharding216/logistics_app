@@ -32,6 +32,8 @@ def index():
         pickup_date_input = request.form['pickup_date']
         pickup_time_input = request.form['pickup_time']
         PO_number = request.form['PO_number']
+        status = 'Scheduled'
+        notes = request.form['notes']
         
         # Create a variable to store the appt details
         # to be used for the main appts db table.
@@ -41,7 +43,9 @@ def index():
             material=material_name, 
             pickup_date=pickup_date_input, 
             pickup_time=pickup_time_input, 
-            PO_number=PO_number
+            PO_number=PO_number,
+            status=status,
+            notes=notes
         )
         
         # Create a variable to store the appt details
@@ -53,7 +57,8 @@ def index():
             material=material_name, 
             pickup_date=pickup_date_input, 
             pickup_time=pickup_time_input, 
-            PO_number=PO_number
+            PO_number=PO_number,
+            modified_by=current_user.username
         )
 
         db.session.add_all([new_appt, create_new_log])
@@ -64,24 +69,39 @@ def index():
     # requesting data from the server ("GET"):
     else:
         search_material = request.args.getlist('material_filter')
-        if not request.args.get('start_date_filter'):
-            # If no start-date was selected, then:
-            search_date_start = '2022-01-01'
-        else:
-            search_date_start = request.args.get('start_date_filter')
-        if not request.args.get('end_date_filter'):
-            search_date_end = '2100-01-01'
-        else:
-            search_date_end = request.args.get('end_date_filter')
-        if not request.args.get('start_time_filter'):
-            search_time_start = '00:00'
-        else:
-            search_time_start = request.args.get('start_time_filter')
-        if not request.args.get('end_time_filter'):
-            search_time_end = '23:59'
-        else:
-            search_time_end = request.args.get('end_time_filter')
+        search_date_start = request.args.get('start_date_filter')
+        search_date_end = request.args.get('end_date_filter')
+        search_time_start = request.args.get('start_time_filter')
+        search_time_end = request.args.get('end_time_filter')
         
+        if search_date_start == "":
+            search_date_start = '2022-01-01'
+
+        if search_date_end == "":
+            search_date_end = '2100-01-01'
+
+        if search_time_start == "":
+            search_time_start = '00:00'    
+
+        if search_time_end == "":
+            search_time_end = '23:59'
+
+        # print(search_material)
+        # print(search_date_start)
+        # print(search_date_end)
+        # print(search_time_start)        
+        # print(search_time_end)
+
+        
+
+
+        
+
+
+
+
+
+
         # If the user wants to see the appointments for all carriers
         if request.args.get('carrier') == 'all':
             #then don't filter the results by carrier name
@@ -89,6 +109,7 @@ def index():
                 filter(appts_db.pickup_date.between(search_date_start, search_date_end)). \
                 filter(appts_db.pickup_time.between(search_time_start, search_time_end)). \
                 order_by(appts_db.pickup_date).all()
+        
         # If you want to filter by a specific carrier
         else:
             search_carrier = request.args.get('carrier')
@@ -96,35 +117,50 @@ def index():
                 .filter(appts_db.pickup_date.between(search_date_start, search_date_end)) \
                 .filter(appts_db.pickup_time.between(search_time_start, search_time_end)) \
                 .filter(appts_db.carrier == search_carrier) \
-                .order_by(appts_db.pickup_date).all()
+                .order_by(appts_db.pickup_date).all()   
+
+
+            
+
+
+
 
         #to generate the carriers within the dropdown list
         carriers = carriers_db.query.order_by(carriers_db.carrier_name).all()
+
+        
+
 
 ############################################################################
         #sum the queried volumes by product
 
         hcl_volumeList = []
+        hcl_load_counter = 0
         for appt in appts:
             if appt.material == '36% HCl' or \
             appt.material == '32% HCl' or \
             appt.material == '15% HCl':
                 hcl_volumeList.append(appt.volume)
+                hcl_load_counter = hcl_load_counter + 1
         hcl_volumeList = sum(hcl_volumeList)
 
         caustic_volumeList = []
+        caustic_load_counter = 0
         for appt in appts:
             if appt.material == '50% Caustic' or \
             appt.material == '25% Caustic' or \
             appt.material == '20% Caustic':
                 caustic_volumeList.append(appt.volume)
+                caustic_load_counter = caustic_load_counter + 1
         caustic_volumeList = sum(caustic_volumeList)
 
         bleach_volumeList = []
+        bleach_load_counter = 0
         for appt in appts:
             if appt.material == '12.5% Bleach' or \
             appt.material == '10% Bleach':
                 bleach_volumeList.append(appt.volume)
+                bleach_load_counter = bleach_load_counter + 1
         bleach_volumeList = sum(bleach_volumeList)
 
 
@@ -166,9 +202,11 @@ def index():
             carriers=carriers, 
             user=current_user,
             hcl_volumeList=hcl_volumeList,
+            hcl_load_counter=hcl_load_counter,
             caustic_volumeList=caustic_volumeList,
-            bleach_volumeList=bleach_volumeList
-            # bleach_query=bleach_query
+            caustic_load_counter=caustic_load_counter,
+            bleach_volumeList=bleach_volumeList,
+            bleach_load_counter=bleach_load_counter
         )
 
 
@@ -232,42 +270,76 @@ def create():
 def update(id):
     appt = appts_db.query.get_or_404(id)
 
-    if request.method == 'POST':
+    if request.method == 'POST' :
 
-        update_new_log_old = log_db(
-            action="Updated - Old",
-            carrier=appt.carrier,
-            volume=appt.volume,
-            material=appt.material,
-            pickup_date=appt.pickup_date,
-            pickup_time=appt.pickup_time, 
-            PO_number=appt.PO_number
-        )
+        # If the user is just marking the appt as "Completed",
+        # then just update the appt list and NOT the History log:
+        if request.form['status'] == "Completed":
 
-        appt.carrier = request.form['carrier']
-        appt.volume = request.form['volume_update']
-        appt.material = request.form['material_update']
-        appt.pickup_date = request.form['pickup_date']
-        appt.pickup_time = request.form['pickup_time']
-        appt.PO_number = request.form['PO_number_update']
+            appt.carrier = request.form['carrier']
+            appt.volume = request.form['volume_update']
+            appt.material = request.form['material_update']
+            appt.pickup_date = request.form['pickup_date']
+            appt.pickup_time = request.form['pickup_time']
+            appt.PO_number = request.form['PO_number_update']
+            appt.status = request.form['status']
+            appt.notes = request.form['notes']
 
-        update_new_log_new = log_db(
-            action="Updated - New",
-            carrier=request.form['carrier'],
-            volume=request.form['volume_update'],
-            material=request.form['material_update'],
-            pickup_date=request.form['pickup_date'],
-            pickup_time=request.form['pickup_time'], 
-            PO_number=request.form['PO_number_update']
-        )
-
-        db.session.add_all([update_new_log_old, update_new_log_new])
-        db.session.commit()
-        return redirect('/')
+            db.session.commit()
+            return redirect('/')
     
+        # Else, if user is doing a normal update, then update
+        # the appt list AND add the change to the History log:
+        else:
+
+            # Record the ORIGINAL appt data before the update:
+            update_new_log_old = log_db(
+                action="Updated - Old",
+                carrier=appt.carrier,
+                volume=appt.volume,
+                material=appt.material,
+                pickup_date=appt.pickup_date,
+                pickup_time=appt.pickup_time, 
+                PO_number=appt.PO_number,
+                notes=appt.notes,
+                modified_by=current_user.username
+            )
+
+            # Collect NEW appt data and modify 'appt':
+            appt.carrier = request.form['carrier']
+            appt.volume = request.form['volume_update']
+            appt.material = request.form['material_update']
+            appt.pickup_date = request.form['pickup_date']
+            appt.pickup_time = request.form['pickup_time']
+            appt.PO_number = request.form['PO_number_update']
+            appt.status = request.form['status']
+            appt.notes = request.form['notes']
+
+            update_new_log_new = log_db(
+                action="Updated - New",
+                carrier=request.form['carrier'],
+                volume=request.form['volume_update'],
+                material=request.form['material_update'],
+                pickup_date=request.form['pickup_date'],
+                pickup_time=request.form['pickup_time'], 
+                PO_number=request.form['PO_number_update'],
+                notes=request.form['notes'],
+                modified_by=current_user.username
+            )
+
+            db.session.add_all([update_new_log_old, update_new_log_new])
+            db.session.commit()
+            return redirect('/')
+
+        
+    # Else, the user is just looking at the Update page:
     else:
+        # To generate the dropdown list options:
         carriers = carriers_db.query.order_by(carriers_db.carrier_name).all()
-        return render_template('update.html', appt=appt, carriers=carriers, user=current_user)
+        status_list = appts_db.query.with_entities(appts_db.status).distinct().all()
+
+        return render_template('update.html', appt=appt, carriers=carriers, 
+            user=current_user, status_list=status_list)
 
 
 #--------------------------------------------------------------------
@@ -286,7 +358,8 @@ def delete(id):
         material=appt_to_delete.material,
         pickup_date=appt_to_delete.pickup_date,
         pickup_time=appt_to_delete.pickup_time, 
-        PO_number=appt_to_delete.PO_number
+        PO_number=appt_to_delete.PO_number,
+        modified_by=current_user.username
     )
 
     db.session.add(delete_new_log)
@@ -348,3 +421,4 @@ def new_carrier():
 
 #--------------------------------------------------------------------
 #--------------------------------------------------------------------
+

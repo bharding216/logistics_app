@@ -1,10 +1,12 @@
-//let user know that appointment was added to db
-function create_appt_popup() {
-    alert("Your appointment was successfully added");
-}
 
 function delete_appt_popup() {
-    alert("Your appointment was successfully deleted");
+    let confirmDelete = confirm('Are you sure you want to delete?');
+    if (confirmDelete) {
+        alert("Your appointment was successfully deleted");
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function new_carrier_popup() {
@@ -19,10 +21,11 @@ function unauth_popup() {
     alert("You do not have access to this function. " +
         "Please contact your system administrator if " +
         "you require access.");
+    return false;
 }
 
 function toggle(source) {
-    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    var checkboxes = document.querySelectorAll('input[type="checkbox"].filter');
     for (var i = 0; i < checkboxes.length; i++) {
         if (checkboxes[i] != source)
             checkboxes[i].checked = source.checked;

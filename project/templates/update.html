@@ -9,11 +9,38 @@
 <div class="container mb-5">
     <form action="/update/{{appt.id}}" method="POST" onsubmit="update_appt_popup()" class="form">
 
+
         <div class="row">
             <div class="col-6 col-sm-6 col-md-6 col-lg-4">
+                <h4>Current status: <u>{{ appt.status }}</u></h4>
+                <label>New status:</label><br>
+                <select name="status" class="form-select">
+                    {% for status in status_list %}
+                        <option value = "{{ status.status }}" {% if status.status == appt.status %} selected {% endif %}>{{ status.status }}</option>             
+                    {% endfor %}
+                </select>
 
-                <h4>Current carrier: <u>{{ appt.carrier }}</u></h4>
-                <label><b>Choose a Carrier:</b></label><br>
+            </div>
+        </div><br>
+
+
+
+        <div class="row">
+            <div class="col-6 col-sm-6 col-md-6 col-lg-4">
+                <h4>Current PO #: <u>{{ appt.PO_number }}</u></h4>
+                <label>New PO Number:</label><br>
+                <input type="text" id="PO_number" name="PO_number_update" 
+                    value="{{ appt.PO_number }}" class="form-control">
+            </div>
+        </div><br>
+
+
+
+
+        <div class="row">
+            <div class="col-6 col-sm-6 col-md-6 col-lg-4">
+                <h4>Current customer: <u>{{ appt.carrier }}</u></h4>
+                <label>Choose a Customer:</label><br>
                 <select name="carrier" class="form-select">
                     {% for carrier in carriers %}
                         <option value = "{{ carrier.carrier_name }}" {% if carrier.carrier_name == appt.carrier %} selected {% endif %}>{{ carrier.carrier_name }}</option>
@@ -21,11 +48,11 @@
                 </select>
 
 
-                <p class="note">Don't see your carrier in the dropdown menu?</p>
+                <p class="note">Don't see your customer in the dropdown menu?</p>
                 <a
                     href="{{ url_for('views.new_carrier') }}"
                     class="btn btn-outline-success"
-                    role="button">Create New Carrier
+                    role="button">Create New Customer
                 </a>
             </div>
         </div><br>
@@ -39,37 +66,32 @@
 
 
 
-        <div class="row">
-            <div class="col-6 col-sm-6 col-md-6 col-lg-4">
-                <h4>Current volume: <u>{{ appt.volume }} gallons</u></h4>
-                <label for="volume_update"><b>Requested Volume [gallons]:</b></label><br>
-                <input class="form-control" type="number" name="volume_update" id="volume"
-                    value="{{ appt.volume }}"><br><br>
-            </div>
-        </div>
+
 
 
 
         <div class="row">
-            <h4>Current material: <u>{{ appt.material }}</u></h4>
+            <h4>Current product: <u>{{ appt.material }}</u></h4>
             <p class="list_heading"><b>Select a product:</b></p>
 
             <div class="col-sm-4 col-md-3 col-lg-2">
 
                 <p class="list_heading">HCl:</p>
                 <div class="form-check">
-                    <input type="radio" class="form-check-input" name="material_update" id="36%_HCl" value="36% HCl">
-                    <label class="form=check-label" for="36% HCl">36% HCl</label>
+                    <input type="radio" class="form-check-input" name="material_update" id="36%_HCl" 
+                        value="36% HCl" {% if appt.material == "36% HCl" %} checked {% endif %}>
+                    <label class="form-check-label" for="36% HCl">36% HCl</label>
                 </div>
 
                 <div class="form-check">
-                    <input type="radio" name="material_update" id="32%_HCl" 
-                        value="32% HCl" class="form-check-input">
+                    <input type="radio" name="material_update" id="32%_HCl" value="32% HCl" 
+                        class="form-check-input" {% if appt.material == "32% HCl" %} checked {% endif %}>
                     <label for="32% HCl" class="form-check-label">32% HCl</label><br>
                 </div>
 
                 <div class="form-check">
-                    <input type="radio" name="material_update" id="15%_HCl" value="15% HCl" class="form-check-input">
+                    <input type="radio" name="material_update" id="15%_HCl" value="15% HCl" 
+                        class="form-check-input" {% if appt.material == "15% HCl" %} checked {% endif %}>
                     <label for="15% HCl" class="form-check-label">15% HCl</label><br>
                 </div>
 
@@ -79,20 +101,20 @@
                 <p class="list_heading">Caustic:</p>
 
                 <div class="form-check">
-                    <input type="radio" name="material_update" id="50%_Caustic" 
-                        value="50% Caustic" class="form-check-input">
+                    <input type="radio" name="material_update" id="50%_Caustic" value="50% Caustic" 
+                        class="form-check-input" {% if appt.material == "50% Caustic" %} checked {% endif %}>
                     <label for="50% Caustic" class="form-check-label">50% Caustic</label><br>
                 </div>
 
                 <div class="form-check">
-                    <input type="radio" name="material_update" id="25%_Caustic" 
-                        value="25% Caustic" class="form-check-input">
+                    <input type="radio" name="material_update" id="25%_Caustic" value="25% Caustic" 
+                        class="form-check-input" {% if appt.material == "25% Caustic" %} checked {% endif %}>
                     <label for="25% Caustic" class="form-check-label">25% Caustic</label><br>
                 </div>
 
                 <div class="form-check">
-                    <input type="radio" name="material_update" id="20%_Caustic" 
-                        value="20% Caustic" class="form-check-input">
+                    <input type="radio" name="material_update" id="20%_Caustic" value="20% Caustic" 
+                        class="form-check-input" {% if appt.material == "20% Caustic" %} checked {% endif %}>
                     <label for="20% Caustic" class="form-check-label">20% Caustic</label><br>
                 </div>
             </div>
@@ -102,14 +124,14 @@
 
 
                 <div class="form-check">
-                    <input type="radio" name="material_update" id="12.5%_Bleach" 
-                        value="12.5% Bleach" class="form-check-input">
+                    <input type="radio" name="material_update" id="12.5%_Bleach" value="12.5% Bleach" 
+                        class="form-check-input" {% if appt.material == "12.5% Bleach" %} checked {% endif %}>
                     <label for="12.5% Bleach" class="form-check-label">12.5% Bleach</label><br>
                 </div>
 
                 <div class="form-check">
-                    <input type="radio" name="material_update" id="10%_Bleach" 
-                        value="10% Bleach" class="form-check-input">
+                    <input type="radio" name="material_update" id="10%_Bleach" value="10% Bleach" 
+                        class="form-check-input" {% if appt.material == "10% Bleach" %} checked {% endif %}>
                     <label for="10% Bleach" class="form-check-label">10% Bleach</label><br><br>
                 </div>
 
@@ -119,17 +141,18 @@
 
         <div class="row">
             <div class="col-8 col-sm-6 col-md-6 col-lg-4">
-                <h4>Current pickup date: <u>{{ appt.pickup_date }}</u></h4>
-                <label for="pickup_date"><b>Select a new date:</b></label>
-                <input type="date" id="pickup_date" name="pickup_date" value="{{ appt.pickup_date }}">
+                <h4>Current pickup date: <u>{{ appt.pickup_date }}</u> (YYYY-MM-DD)</h4>
+                <label for="pickup_date">Select a new date:</label>
+                <input type="date" id="pickup_date" name="pickup_date" 
+                    value="{{ appt.pickup_date }}">
             </div>
         </div><br>
 
 
         <div class="row">
             <div class="col-6 col-sm-6 col-md-6 col-lg-4">
-                <h4>Current pickup time: <u>{{ appt.pickup_time }}</u></h4>
-                <label for="pickup_time"><b>Select a new time:</b></label>
+                <h4>Current pickup time: <u>{{ appt.pickup_time }}</u> (24-hr)</h4>
+                <label for="pickup_time">Select a new time:</label>
                 <input type="time" id="pickup_time" name="pickup_time" 
                     value="{{ appt.pickup_time }}">
             </div>
@@ -137,18 +160,34 @@
 
 
 
+
+
+
+
+
         <div class="row">
             <div class="col-6 col-sm-6 col-md-6 col-lg-4">
-                <h4>Current PO #: <u>{{ appt.PO_number }}</u></h4>
-                <label>Enter a new PO Number:</label><br>
-                <input type="text" id="PO_number" name="PO_number_update" 
-                    value="{{ appt.PO_number }}" class="form-control">
+                <h4>Current volume: <u>{{ appt.volume }} gallons</u></h4>
+                <label for="volume_update">Requested Volume [gallons]:</label><br>
+                <input class="form-control" type="number" name="volume_update" id="volume"
+                    value="{{ appt.volume }}"><br>
             </div>
-        </div><br>
+        </div>
+
+
+        <div class="row">
+            <div class="col-6 col-sm-6 col-md-6 col-lg-4">
+                <label for="notes"><b>Notes:</b></label><br>
+                <input class="form-control" type="text" name="notes" id="notes"
+                    value="{{ appt.notes }}"><br>
+            </div>
+        </div>
 
 
 
-        <button type="submit" class="btn btn-outline-success" id="update_button" disabled>Submit</button>
+
+
+        <button type="submit" class="btn btn-outline-success" id="update_button">Submit</button>
 
 
     </form>
@@ -165,15 +204,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
+<!--
     <script>
         //define a variable named 'update' to represent the button
         let update = document.querySelector('#update_button');
@@ -187,7 +218,7 @@
             }
         }
     </script>
-
+-->
 
 
 {% endblock %}

@@ -14,6 +14,8 @@ class appts_db(db.Model):
     pickup_date = db.Column(db.String(10))
     pickup_time = db.Column(db.String(5))
     PO_number = db.Column(db.String(30))
+    status = db.Column(db.String(30))
+    notes = db.Column(db.Text)
 
 
 class carriers_db(db.Model):
@@ -32,6 +34,8 @@ class log_db(db.Model):
     pickup_date = db.Column(db.String(10))
     pickup_time = db.Column(db.String(5))
     PO_number = db.Column(db.String(30))
+    notes = db.Column(db.Text)
+    modified_by = db.Column(db.String(100), nullable=False)
 
 
 class users(db.Model, UserMixin):

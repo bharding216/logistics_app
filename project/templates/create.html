@@ -9,45 +9,44 @@
 <div class="container mb-5">
     <form action="/" 
         method="POST" 
-        onsubmit="create_appt_popup()" 
-        id="new_appt_form">
+        onsubmit="return validateForm()" 
+        id="new_appt_form"
+        name="create_appt_form">
         
+
+
+        <div class="row">
+            <div class="col-6 col-sm-6 col-md-6 col-lg-4">
+                <label for="PO_number"><b>PO Number:</b></label>
+                <input type="text" id="PO_number" name="PO_number" 
+                    placeholder="PO-xxxxx" class="form-control">
+            </div>
+        </div><br>
+
+
+
         <div class="row">
             <div class="col-6 col-sm-6 col-md-6 col-lg-4">
                 <!--This Jinja for loop goes through each carrier 
                 in the 'carriers' column that is passed from the view 
                 function and adds all the unique values to the
                 dropdown list.-->
-                <label><b>Choose a Carrier:</b></label><br>
+                <label><b>Choose a Customer:</b></label><br>
                 <select name="carrier" class="form-select">
+                    <option disabled selected value></option>
                     {% for carrier in carriers %}
-                        <option value = "{{ carrier.carrier_name }}" 
-                            selected>{{ carrier.carrier_name }}</option>
+                    <option value = "{{ carrier.carrier_name }}">{{ carrier.carrier_name }}</option>
                     {% endfor %}
                 </select>
                 
-                <p class="note">Don't see your carrier in the dropdown menu?</p>
+                <p class="note">Don't see your customer in the dropdown menu?</p>
                 <a
                     href="{{ url_for('views.new_carrier') }}"
                     class="btn btn-outline-success"
-                    role="button">Create New Carrier
+                    role="button">Create New Customer
                 </a>
             </div>
         </div><br>
-
-
-
-        <div class="row">
-            <div class="col-6 col-sm-6 col-md-6 col-lg-4">
-                <label for="volume"><b>Requested Volume [gallons]:</b></label><br>
-                <input class="form-control" 
-                    type="number" 
-                    name="volume" 
-                    id="volume" 
-                    value="volume">
-            </div>
-        </div><br>
-
 
 
 
@@ -136,12 +135,16 @@
         </div><br>
 
 
+
+
         <div class="row">
             <div class="col-8 col-sm-6 col-md-6 col-lg-4">
                 <label for="pickup_date"><b>Pickup Date:</b></label>
                 <input type="date" id="pickup_date" name="pickup_date">
             </div>
         </div><br>
+
+
 
         <div class="row">
             <div class="col-6 col-sm-6 col-md-6 col-lg-4">
@@ -151,14 +154,30 @@
         </div><br>
 
 
+
+
+
         <div class="row">
             <div class="col-6 col-sm-6 col-md-6 col-lg-4">
-                <label for="PO_number"><b>PO Number:</b></label>
-                <input type="text" id="PO_number" name="PO_number" 
-                    placeholder="PO-xxxxx" class="form-control">
+                <label for="volume"><b>Requested Volume [gallons]:</b></label><br>
+                <input class="form-control" 
+                    type="number" 
+                    name="volume" 
+                    id="volume" 
+                    value="volume">
             </div>
         </div><br>
 
+
+        <div class="row">
+            <div class="col-6 col-sm-6 col-md-6 col-lg-4">
+                <label for="notes"><b>Notes:</b></label><br>
+                <input class="form-control" 
+                    type="text" 
+                    name="notes" 
+                    id="notes">
+            </div>
+        </div><br>
 
 
         <button
@@ -171,6 +190,43 @@
     </form>
 
 </div>
+
+
+
+
+
+
+<script>
+    function validateForm() {
+        let w = document.forms["create_appt_form"]["carrier"].value;
+            x = document.forms["create_appt_form"]["pickup_date"].value;
+            y = document.forms["create_appt_form"]["pickup_time"].value;
+            z = document.forms["create_appt_form"]["material"].value;
+
+        if (w == "") {
+            alert("Customer field cannot be left blank");
+            return false;   
+
+        } else if (x == "") {
+            alert("Date field cannot be left blank");
+            return false;
+
+        } else if (y == "") {
+            alert("Time field cannot be left blank");
+            return false;
+
+        } else if (z == "") {
+            alert("Please choose a product");
+            return false;
+
+        } else {
+            alert("Your appointment was successfully created");
+
+        }
+
+
+    }
+</script>
 
 
 

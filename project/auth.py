@@ -52,6 +52,8 @@ def login():
                 your system administrator.', 
                 category='error')
 
+    flash('Please log in to continue.', category='error')       
+
     return render_template('login.html', user=current_user)
 
 
@@ -68,7 +70,6 @@ def signup():
         username = request.form.get("username_signup")
         password1 = request.form.get("password1")
         password2 = request.form.get("password2")
-        access_ranking = "1"
 
         email_exists = users.query.filter_by(email=email).first()
         username_exists = users.query.filter_by(username=username).first()
@@ -112,7 +113,7 @@ def signup():
 @login_required
 def logout():
     logout_user()
-    flash('User logged out!', category='success')
+    flash('You have been logged out.', category='success')
 
     return redirect(url_for('auth.login'))
 

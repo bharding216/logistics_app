@@ -48,13 +48,15 @@
         <thead>
             <tr>
                 <th scope="col">Action</th>
-                <th scope="col">Carrier</th>
-                <th scope="col">Material</th>
-                <th scope="col">Volume [gallons]</th>
+                <th scope="col">Customer</th>
+                <th scope="col">Product</th>
+                <th scope="col">Volume [gal]</th>
                 <th scope="col">Pickup Date [YYYY-MM-DD]</th>
                 <th scope="col">Pickup Time [24-hr]</th>
-                <th scope="col">PO Number</th>
+                <th scope="col">PO #</th>
+                <th scope="col">Notes</th>
                 <th scope="col">Date Modified</th>
+                <th scope="col">Modified By</th>
             </tr>
         </thead>
 
@@ -68,7 +70,9 @@
                     <td>{{ item.pickup_date }}</td>
                     <td>{{ item.pickup_time }}</td>
                     <td>{{ item.PO_number }}</td>
+                    <td>{{ item.notes }}</td>
                     <td>{{ item.modified_on.strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                    <td>{{ item.modified_by }}</td>
                 </tr>
             {% endfor %}
         </tbody>

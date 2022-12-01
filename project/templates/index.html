@@ -15,49 +15,49 @@
                 <!--1st column-->
                 <div class="col">
                     <div class="form-check">
-                        <b>Select material:</b><br>
+                        <b>Select product:</b><br>
 
-                        <input class="form-check-input" type="checkbox" 
+                        <input class="form-check-input filter" type="checkbox" 
                             value="36% HCl" id="36% HCl" name="material_filter" checked>
                         <label class="form-check-label" for="36% HCl">36% HCl</label><br>
                         <!--------------------------------------------------------->
-                        <input class="form-check-input" type="checkbox" 
+                        <input class="form-check-input filter" type="checkbox" 
                         value="32% HCl" id="32% HCl" name="material_filter"
                         checked>
                         <label class="form-check-label" for="32% HCl">
                             32% HCl</label><br>
                         <!--------------------------------------------------------->
-                        <input class="form-check-input" type="checkbox" 
+                        <input class="form-check-input filter" type="checkbox" 
                             name="material_filter" id="15% HCl" value="15% HCl" 
                             checked>
                         <label class="form-check-label" for="15% HCl">
                             15% HCl</label><br>
                         <!--------------------------------------------------------->
-                        <input class="form-check-input" type="checkbox" 
+                        <input class="form-check-input filter" type="checkbox" 
                             value="50% Caustic" id="50% Caustic" name="material_filter"
                             checked>
                         <label class="form-check-label" for="50% Caustic">
                             50% Caustic</label><br>
                         <!--------------------------------------------------------->
-                        <input class="form-check-input" type="checkbox" 
+                        <input class="form-check-input filter" type="checkbox" 
                             name="material_filter" id="25% Caustic" value="25% Caustic" 
                             checked>
                         <label class="form-check-label" 
                             for="25% Caustic">25% Caustic</label><br>
                         <!--------------------------------------------------------->
-                        <input class="form-check-input" type="checkbox" 
+                        <input class="form-check-input filter" type="checkbox" 
                             name="material_filter" id="20% Caustic" value="20% Caustic" 
                             checked>
                         <label class="form-check-label"
                             for="20% Caustic">20% Caustic</label><br>
                         <!--------------------------------------------------------->
-                        <input class="form-check-input" type="checkbox" 
+                        <input class="form-check-input filter" type="checkbox" 
                             name="material_filter" id="12.5% Bleach" value="12.5% Bleach" 
                             checked>
                         <label class="form-check-label"
                             for="12.5% Bleach">12.5% Bleach</label><br>
                         <!--------------------------------------------------------->
-                        <input class="form-check-input" type="checkbox" name="material_filter" 
+                        <input class="form-check-input filter" type="checkbox" name="material_filter" 
                             id="10%_Bleach_filter" value="10% Bleach" 
                             checked>
                         <label class="form-check-label"
@@ -88,21 +88,23 @@
                     <!--------------------------------------------------------->
                     <div class="time-input">
                         <label for="start_time_filter">Choose a start time:</label><br>
-                        <input type="time" id="start_time_filter" name="start_time_filter"><br>
+                        <input type="time" id="start_time_filter" 
+                            name="start_time_filter" value="00:00"><br>
                     </div>
                     <!--------------------------------------------------------->
                     <div class="time-input">
                         <label for="end_time_filter">Choose an end time:</label><br>
-                        <input type="time" id="end_time_filter" name="end_time_filter"><br>
+                        <input type="time" id="end_time_filter" 
+                            name="end_time_filter" value="23:59"><br>
                     </div>
                 </div>
             
 
                 <!--3rd column-->
                 <div class="col text-center">
-                    <b>Select a Carrier:</b><br>
+                    <b>Select a Customer:</b><br>
                         <select name="carrier">
-                            <option value = "all">All Carriers</option>
+                            <option value = "all">All</option>
                             {% for carrier in carriers %}
                                 <option value = "{{ carrier.carrier_name }}">
                                         {{ carrier.carrier_name }}</option>
@@ -130,6 +132,10 @@
 
 
 
+
+
+
+
     <div id="appointment_list">
         <h2>Queried Appointments</h2>
 
@@ -138,13 +144,14 @@
 
                 <thead>
                     <tr>
-                        <th scope="col">Carrier</th>
-                        <th scope="col">Material</th>
-                        <th scope="col">Volume [gallons]</th>
-                        <th scope="col">Pickup Date [YYYY-MM-DD]</th>
-                        <th scope="col">Pickup Time [24-hr]</th>
-                        <th scope="col">PO Number</th>
-                        <th scope="col">Completed?</th>
+                        <th scope="col">Customer</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Volume [gal]</th>
+                        <th scope="col">Date [YYYY-MM-DD]</th>
+                        <th scope="col">Time [24-hr]</th>
+                        <th scope="col">PO #</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Notes</th>
                         <th scope="col">Actions</th>
                     </tr>
                 </thead>
@@ -159,18 +166,8 @@
                             <td class="align-middle">{{ appt.pickup_date }}</td>
                             <td class="align-middle">{{ appt.pickup_time }}</td>
                             <td class="align-middle">{{ appt.PO_number }}</td>
-                            <td class="align-middle"><input type="checkbox" 
-                                class="form-check-input">
-                                
-                                <br>
-                                <a 
-                                class="btn btn-outline-success my-1" 
-                                href="" 
-                                onclick=""
-                                role="button">Submit</a>   
-
-                            </td>
-
+                            <td class="align-middle">{{ appt.status }}</td>
+                            <td class="align-middle">{{ appt.notes }}</td>
 
                             {% if user.access_ranking == 3 %}
                             
@@ -184,7 +181,7 @@
                                 <a 
                                     class="btn btn-outline-danger my-1" 
                                     href="{{ url_for('views.delete', id=appt.id) }}" 
-                                    onclick="delete_appt_popup()"
+                                    onclick="return delete_appt_popup()"
                                     role="button">Delete
                                 </a>
 
@@ -197,12 +194,12 @@
                                     href="" 
                                     class="btn btn-outline-success my-1"
                                     role="button"
-                                    onclick="unauth_popup()">Update</a>
+                                    onclick="return unauth_popup()">Update</a>
                                 <a 
                                     href="" 
                                     class="btn btn-outline-success my-1"
                                     role="button"
-                                    onclick="unauth_popup()">Delete</a>
+                                    onclick="return unauth_popup()">Delete</a>
                             </td>
                             {% endif %}
 
@@ -221,7 +218,8 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">Material</th>
+                    <th scope="col">Product</th>
+                    <th scope="col"># of Loads</th>
                     <th scope="col">Total Volume [gallons]</th>
                 </tr>
             </thead>
@@ -229,29 +227,45 @@
             <tbody>          
                 <tr>
                     <td>HCl</td>
+                    <td>{{hcl_load_counter}}</td>
                     <td>{{hcl_volumeList}}</td>
                 </tr>
                 <tr>
                     <td>Caustic</td>
+                    <td>{{caustic_load_counter}}</td>
                     <td>{{caustic_volumeList}}</td>
                 </tr>
                 <tr>
                     <td>Bleach</td>
+                    <td>{{bleach_load_counter}}</td>
                     <td>{{bleach_volumeList}}</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-<!--refresh the page at some specified interval, 
+
+
+
+
+<script>
+
+document.getElementById('start_date_filter').valueAsDate = new Date();
+document.getElementById('end_date_filter').valueAsDate = new Date();
+
+
+
+/*
+refresh the page at some specified interval, 
     time in milliseconds.
     1 second = 1,000 milliseconds
     1 minute = 60,000 milliseconds
-<script>
+
 setTimeout(function(){
    window.location.reload(1);
 }, 120000);
+*/
 </script>
--->
+
 
 {% endblock %}
