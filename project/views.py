@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request, redirect, flash, session
 from flask_login import login_required, current_user
-from sqlalchemy import func, or_
+from sqlalchemy import func, or_, and_
 from .models import carriers_db, appts_db, log_db, carriers_db
 from . import db, mail
 from flask_mail import Message
+import datetime
 
 views = Blueprint("views", __name__)
 
@@ -20,194 +21,120 @@ views = Blueprint("views", __name__)
 #--------------------------------------------------------------------
 
 
-@views.route('/', methods=['GET', 'POST'])
+@views.route('/')
 @login_required
 def index():
-    # If the user creates a new appointment:
-    if request.method == 'POST':
 
-        carrier_name = request.form['carrier']
-        requested_volume = request.form['volume']
-        material_name = request.form['material']
-        pickup_date_input = request.form['pickup_date']
-        pickup_time_input = request.form['pickup_time']
-        PO_number = request.form['PO_number']
-        status = 'Scheduled'
-        notes = request.form['notes']
-        
-        # Create a variable to store the appt details
-        # to be used for the main appts db table.
-        new_appt = appts_db(
-            carrier=carrier_name, 
-            volume=requested_volume,
-            material=material_name, 
-            pickup_date=pickup_date_input, 
-            pickup_time=pickup_time_input, 
-            PO_number=PO_number,
-            status=status,
-            notes=notes
-        )
-        
-        # Create a variable to store the appt details
-        # to be used for the change log db table.
-        create_new_log = log_db(
-            action="Created",
-            carrier=carrier_name, 
-            volume=requested_volume,
-            material=material_name, 
-            pickup_date=pickup_date_input, 
-            pickup_time=pickup_time_input, 
-            PO_number=PO_number,
-            modified_by=current_user.username
-        )
-
-        db.session.add_all([new_appt, create_new_log])
-        db.session.commit()
-        return redirect('/')
+    search_material = request.args.getlist('material_filter')
     
-    # If the user is NOT creating a new appointment and is just
-    # requesting data from the server ("GET"):
+    if request.args.get('start_date_filter') is None:
+        start_date = datetime.datetime.now().strftime("%Y-%m-%d")
     else:
-        search_material = request.args.getlist('material_filter')
-        search_date_start = request.args.get('start_date_filter')
-        search_date_end = request.args.get('end_date_filter')
-        search_time_start = request.args.get('start_time_filter')
-        search_time_end = request.args.get('end_time_filter')
+        start_date = request.args.get('start_date_filter')
+
+    if request.args.get('end_date_filter') is None:
+        end_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    else:
+        end_date = request.args.get('end_date_filter')
+
+    if request.args.get('start_time_filter') is None:
+        start_time = '00:00'
+    else:
+        start_time = request.args.get('start_time_filter')
+
+    if request.args.get('end_time_filter') is None:
+        end_time = '23:59'
+    else:
+        end_time = request.args.get('end_time_filter')
+
+    # Subquery to match the status requested. 
+    status_selection = request.args.get('status')
+    if status_selection == 'All':
+        status_query = db.session.query(appts_db.id).subquery()
+    else:
+        status_query = db.session.query(appts_db.id) \
+            .filter(appts_db.status == status_selection).subquery()
         
-        if search_date_start == "":
-            search_date_start = '2022-01-01'
+    # Subquery to match the carrier requested.
+    carrier_selection = request.args.get('carrier')
+    if carrier_selection == 'All':
+        carrier_query = db.session.query(appts_db.id).subquery()
+    else:
+        carrier_query = db.session.query(appts_db.id) \
+            .filter(appts_db.carrier == carrier_selection).subquery()
 
-        if search_date_end == "":
-            search_date_end = '2100-01-01'
+    appts = db.session.query(appts_db) \
+        .filter(appts_db.id.in_(status_query)) \
+        .filter(appts_db.id.in_(carrier_query)) \
+        .filter(appts_db.material.in_(search_material)) \
+        .filter(appts_db.pickup_date.between(start_date, end_date)) \
+        .filter(appts_db.pickup_time.between(start_time, end_time)) \
+        .order_by(appts_db.pickup_date).all()     
 
-        if search_time_start == "":
-            search_time_start = '00:00'    
+  
+    # To generate the carriers within the dropdown list
+    carriers = carriers_db.query.order_by(carriers_db.carrier_name).all()
 
-        if search_time_end == "":
-            search_time_end = '23:59'
+    ############################################################################
+    # Sum the queried volumes by product.
+    # And count the number of trucks.
+    hcl_volumeList = []
+    hcl_load_counter = 0
+    for appt in appts:
+        if appt.material == '36% HCl' or \
+        appt.material == '32% HCl' or \
+        appt.material == '15% HCl':
+            hcl_volumeList.append(appt.volume)
+            hcl_load_counter = hcl_load_counter + 1
+    hcl_gallons = (sum(hcl_volumeList))/1000
+    hcl_load_total_count = hcl_load_counter
 
-        # print(search_material)
-        # print(search_date_start)
-        # print(search_date_end)
-        # print(search_time_start)        
-        # print(search_time_end)
+    caustic_volumeList = []
+    caustic_load_counter = 0
+    for appt in appts:
+        if appt.material == '50% Caustic' or \
+        appt.material == '32% Caustic' or \
+        appt.material == '30% Caustic' or \
+        appt.material == '25% Caustic' or \
+        appt.material == '20% Caustic':
+            caustic_volumeList.append(appt.volume)
+            caustic_load_counter = caustic_load_counter + 1
+    caustic_gallons = (sum(caustic_volumeList))/1000
+    caustic_load_total_count = caustic_load_counter
 
-        
+    bleach_volumeList = []
+    bleach_load_counter = 0
+    for appt in appts:
+        if appt.material == '12.5% Bleach' or \
+        appt.material == '10% Bleach' or \
+        appt.material == '14%+ Bleach':
+            bleach_volumeList.append(appt.volume)
+            bleach_load_counter = bleach_load_counter + 1
+    bleach_gallons = (sum(bleach_volumeList))/1000
+    bleach_load_total_count = bleach_load_counter
 
-
-        
-
-
-
-
-
-
-        # If the user wants to see the appointments for all carriers
-        if request.args.get('carrier') == 'all':
-            #then don't filter the results by carrier name
-            appts = appts_db.query.filter(appts_db.material.in_(search_material)). \
-                filter(appts_db.pickup_date.between(search_date_start, search_date_end)). \
-                filter(appts_db.pickup_time.between(search_time_start, search_time_end)). \
-                order_by(appts_db.pickup_date).all()
-        
-        # If you want to filter by a specific carrier
-        else:
-            search_carrier = request.args.get('carrier')
-            appts = appts_db.query.filter(appts_db.material.in_(search_material)) \
-                .filter(appts_db.pickup_date.between(search_date_start, search_date_end)) \
-                .filter(appts_db.pickup_time.between(search_time_start, search_time_end)) \
-                .filter(appts_db.carrier == search_carrier) \
-                .order_by(appts_db.pickup_date).all()   
-
-
-            
-
-
-
-
-        #to generate the carriers within the dropdown list
-        carriers = carriers_db.query.order_by(carriers_db.carrier_name).all()
-
-        
-
-
-############################################################################
-        #sum the queried volumes by product
-
-        hcl_volumeList = []
-        hcl_load_counter = 0
-        for appt in appts:
-            if appt.material == '36% HCl' or \
-            appt.material == '32% HCl' or \
-            appt.material == '15% HCl':
-                hcl_volumeList.append(appt.volume)
-                hcl_load_counter = hcl_load_counter + 1
-        hcl_volumeList = sum(hcl_volumeList)
-
-        caustic_volumeList = []
-        caustic_load_counter = 0
-        for appt in appts:
-            if appt.material == '50% Caustic' or \
-            appt.material == '25% Caustic' or \
-            appt.material == '20% Caustic':
-                caustic_volumeList.append(appt.volume)
-                caustic_load_counter = caustic_load_counter + 1
-        caustic_volumeList = sum(caustic_volumeList)
-
-        bleach_volumeList = []
-        bleach_load_counter = 0
-        for appt in appts:
-            if appt.material == '12.5% Bleach' or \
-            appt.material == '10% Bleach':
-                bleach_volumeList.append(appt.volume)
-                bleach_load_counter = bleach_load_counter + 1
-        bleach_volumeList = sum(bleach_volumeList)
+    ############################################################################
 
 
-        # hcl_query = db.session.query(func.sum(appts_db.volume)) \
-        #     .filter(or_(appts_db.material == '36% HCl', \
-        #     appts_db.material == '32% HCl', \
-        #     appts_db.material == '15% HCl')).one()
-
-        # if hcl_query[0] == None:
-        #     hcl_list = list(hcl_query)
-        #     hcl_list[0] = 0
-        #     hcl_query = tuple(hcl_list)
-
-        # caustic_query = db.session.query(func.sum(appts_db.volume)) \
-        #     .filter(or_(appts_db.material == '50% Caustic', \
-        #     appts_db.material == '25% Caustic', \
-        #     appts_db.material == '20% Caustic')).one()
-
-        # if caustic_query[0] == None:
-        #     caustic_list = list(caustic_query)
-        #     caustic_list[0] = 0
-        #     caustic_query = tuple(caustic_list)
-
-        # bleach_query = db.session.query(func.sum(appts_db.volume)) \
-        #     .filter(or_(appts_db.material == '12.5% Bleach', \
-        #     appts_db.material == '10% Bleach')).one()
-
-        # if bleach_query[0] == None:
-        #     bleach_list = list(bleach_query)
-        #     bleach_list[0] = 0
-        #     bleach_query = tuple(bleach_list)
-############################################################################
-
-
-
-        return render_template(
-            'index.html', 
-            appts=appts, 
-            carriers=carriers, 
-            user=current_user,
-            hcl_volumeList=hcl_volumeList,
-            hcl_load_counter=hcl_load_counter,
-            caustic_volumeList=caustic_volumeList,
-            caustic_load_counter=caustic_load_counter,
-            bleach_volumeList=bleach_volumeList,
-            bleach_load_counter=bleach_load_counter
-        )
+    return render_template(
+        'index.html', 
+        appts=appts, 
+        carriers=carriers, 
+        carrier_selection=carrier_selection,
+        status_selection=status_selection,
+        user=current_user,
+        hcl_gallons=hcl_gallons,
+        hcl_load_total_count=hcl_load_total_count,
+        caustic_gallons=caustic_gallons,
+        caustic_load_total_count=caustic_load_total_count,
+        bleach_gallons=bleach_gallons,
+        bleach_load_total_count=bleach_load_total_count,
+        start_date=start_date,
+        end_date=end_date,
+        search_material=search_material,
+        start_time=start_time,
+        end_time=end_time
+    )
 
 
 #--------------------------------------------------------------------
@@ -217,17 +144,27 @@ def index():
 @views.route('/history', methods=['GET'])
 @login_required
 def history():
-    if not request.args.get('log'):
+    if request.args.get('number_of_records') is None:
         query_limit = "10"
     else:
-        query_limit = request.args.get('log')
+        query_limit = request.args.get('number_of_records')
 
-    log = log_db.query.order_by(log_db.id.desc()).limit(query_limit).all()
+    if request.args.get('action') is None:
+        action_choice = 'Created'
+    else:
+        action_choice = request.args.get('action')
+
+    log_list = db.session.query(log_db) \
+        .filter(log_db.action == action_choice) \
+        .order_by(log_db.id.desc()) \
+        .limit(query_limit).all()
+
     return render_template(
         'history.html', 
-        log=log, 
         query_limit=query_limit, 
-        user=current_user
+        user=current_user,
+        action_choice=action_choice,
+        log_list=log_list
     )
 
 
@@ -245,19 +182,57 @@ def create():
         pickup_date_input = request.form['pickup_date']
         pickup_time_input = request.form['pickup_time']
         PO_number = request.form['PO_number']
-        
-        new_appt = appts_db(carrier=carrier_name, volume=requested_volume,
-            material=material_name, pickup_date=pickup_date_input, 
-            pickup_time=pickup_time_input, PO_number=PO_number)
+        status = 'Scheduled'
+        notes = request.form['notes']
 
-        db.session.add(new_appt)
-        db.session.commit()
-        return redirect('/', user=current_user)
+        # Try to find an appointment in that time slot.
+        duplicate_appt = appts_db.query.filter(and_(
+            appts_db.material == material_name,
+            appts_db.pickup_date == pickup_date_input,
+            appts_db.pickup_time == pickup_time_input
+            )).first()
+        
+        if duplicate_appt is None:
+
+            new_appt = appts_db(
+                carrier=carrier_name, 
+                volume=requested_volume,
+                material=material_name, 
+                pickup_date=pickup_date_input, 
+                pickup_time=pickup_time_input, 
+                PO_number=PO_number,
+                status=status,
+                notes=notes
+            )
+
+            create_new_log = log_db(
+                action="Created",
+                carrier=carrier_name, 
+                volume=requested_volume,
+                material=material_name, 
+                pickup_date=pickup_date_input, 
+                pickup_time=pickup_time_input, 
+                PO_number=PO_number,
+                modified_by=current_user.username
+            )
+
+
+            db.session.add_all([new_appt, create_new_log])
+            db.session.commit()
+            flash('Your appointment was successfully created!', category='success')
+            return redirect('/')
+        
+        
+        else:
+            flash('This time slot is already taken. Please check the schedule and try again.', category='error')
+            carriers = carriers_db.query.order_by(carriers_db.carrier_name).all()
+            return render_template('create.html', carriers=carriers, user=current_user)
+    
+        
 
     else:
-        #this query variable is passed to the 'create.html' page where
-        #it is rendered. 
         carriers = carriers_db.query.order_by(carriers_db.carrier_name).all()
+        # 'carriers' is passed to the 'create.html' page where it is rendered. 
         return render_template('create.html', carriers=carriers, user=current_user)
 
 
@@ -273,7 +248,9 @@ def update(id):
     if request.method == 'POST' :
 
         # If the user is just marking the appt as "Completed",
-        # then just update the appt list and NOT the History log:
+        # then just update the appt list and NOT the History log.
+        # This is done to limit the number of nuisance entries 
+        # made to the history log. 
         if request.form['status'] == "Completed":
 
             appt.carrier = request.form['carrier']
@@ -286,12 +263,12 @@ def update(id):
             appt.notes = request.form['notes']
 
             db.session.commit()
+            flash('Appointment was successfully marked as "completed".', category='success')
             return redirect('/')
     
         # Else, if user is doing a normal update, then update
         # the appt list AND add the change to the History log:
         else:
-
             # Record the ORIGINAL appt data before the update:
             update_new_log_old = log_db(
                 action="Updated - Old",
@@ -305,33 +282,54 @@ def update(id):
                 modified_by=current_user.username
             )
 
-            # Collect NEW appt data and modify 'appt':
-            appt.carrier = request.form['carrier']
-            appt.volume = request.form['volume_update']
-            appt.material = request.form['material_update']
-            appt.pickup_date = request.form['pickup_date']
-            appt.pickup_time = request.form['pickup_time']
-            appt.PO_number = request.form['PO_number_update']
-            appt.status = request.form['status']
-            appt.notes = request.form['notes']
+            duplicate_appt = appts_db.query.filter(and_(
+                appts_db.material == request.form['material_update'],
+                appts_db.pickup_date == request.form['pickup_date'],
+                appts_db.pickup_time == request.form['pickup_time']
+                )).first()
 
-            update_new_log_new = log_db(
-                action="Updated - New",
-                carrier=request.form['carrier'],
-                volume=request.form['volume_update'],
-                material=request.form['material_update'],
-                pickup_date=request.form['pickup_date'],
-                pickup_time=request.form['pickup_time'], 
-                PO_number=request.form['PO_number_update'],
-                notes=request.form['notes'],
-                modified_by=current_user.username
-            )
+            print(duplicate_appt)
+            
+            if duplicate_appt is None:
 
-            db.session.add_all([update_new_log_old, update_new_log_new])
-            db.session.commit()
-            return redirect('/')
+                # Collect NEW appt data and modify 'appt':
+                appt.carrier = request.form['carrier']
+                appt.volume = request.form['volume_update']
+                appt.material = request.form['material_update']
+                appt.pickup_date = request.form['pickup_date']
+                appt.pickup_time = request.form['pickup_time']
+                appt.PO_number = request.form['PO_number_update']
+                appt.status = request.form['status']
+                appt.notes = request.form['notes']
 
+                update_new_log_new = log_db(
+                    action="Updated - New",
+                    carrier=request.form['carrier'],
+                    volume=request.form['volume_update'],
+                    material=request.form['material_update'],
+                    pickup_date=request.form['pickup_date'],
+                    pickup_time=request.form['pickup_time'], 
+                    PO_number=request.form['PO_number_update'],
+                    notes=request.form['notes'],
+                    modified_by=current_user.username
+                )
+
+                db.session.add_all([update_new_log_old, update_new_log_new])
+                db.session.commit()
+                flash('Your appointment was successfully updated!', category='success')
+                return redirect('/')
+            
+            else:
+                flash('This time slot is already taken. Please check the schedule and try again.', category='error')
+                # To generate the dropdown list options:
+                carriers = carriers_db.query.order_by(carriers_db.carrier_name).all()
+                status_list = appts_db.query.with_entities(appts_db.status).distinct().all()
+
+                return render_template('update.html', appt=appt, carriers=carriers, 
+                    user=current_user, status_list=status_list)
         
+            
+
     # Else, the user is just looking at the Update page:
     else:
         # To generate the dropdown list options:
@@ -367,23 +365,6 @@ def delete(id):
     db.session.commit()
     return redirect('/')
 
-# FROM THE USERS PRACTICE APP:
-
-#@views.route("delete-appt/<int:id>")
-#@login_required
-#def delete_appt(id):
-#   appt_to_delete = appts_db.query.filter_by(id=id).first()
-
-#   if not appt_to_delete:
-#       flash("appt does not exist.", category="error")
-#   elif current_user.id != appt_to_delete.id:
-#       flash("you do not have permission to delete this appt.", category="error")
-#   else:
-#       db.session.delete(appt_to_delete)
-#       db.session.commit()
-#       flash("appt deleted", category="success")
-#   return redirect(url_for('views.home'))
-
 
 
 #--------------------------------------------------------------------
@@ -411,12 +392,10 @@ def new_carrier():
 #--------------------------------------------------------------------
 
 
-# @views.before_request
-# def views_inactivity_logout():
-#     session.permanent = True
-#     views.permanent_session_lifetime = timedelta(minutes=1)
-#     #session.modified = True
-#     #g.user = current_user
+
+    
+
+
 
 
 #--------------------------------------------------------------------

@@ -10,8 +10,8 @@
 
         <div class="row pb-3">
             <div class="col-12 col-sm-12 col-md-12 col-lg-12">
-                <label for="log">Number of records to query:</label>
-                <select name="log" id="log_query">
+                <label for="log_query">Number of records to view:</label>
+                <select name="number_of_records" id="log_query" class="form-select-sm">
                     <option value="10" 
                     {% if query_limit == "10" %} selected {% endif %}>10</option>
                     <option value="25" 
@@ -25,9 +25,30 @@
         </div>
 
 
+        <div class="row pb-3">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                <label for="action">Action:</label>
+                <select name="action" id="action" class="form-select-sm">
+
+                    <option value="Created" 
+                    {% if action_choice == "Created" %} selected {% endif %}>Created</option>
+
+                    <option value="Updated" 
+                    {% if action_choice == "Updated" %} selected {% endif %}>Updated</option>
+
+                    <option value="Deleted" 
+                    {% if action_choice == "Deleted" %} selected {% endif %}>Deleted</option>
+
+                </select>
+
+
+            </div>
+        </div>
+
+
         <div class="row">
             <div class="col-6 col-sm-6 col-md-4 col-lg-4">
-                <input type="submit" value="Run Query" class="btn btn-outline-success">
+                <input type="submit" value="Search" class="btn btn-outline-success">
             </div>
         </div>
 
@@ -61,7 +82,7 @@
         </thead>
 
         <tbody>
-            {% for item in log %}
+            {% for item in log_list %}
                 <tr>
                     <td>{{ item.action }}</td>
                     <td>{{ item.carrier }}</td>

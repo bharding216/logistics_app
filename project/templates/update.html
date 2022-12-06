@@ -7,7 +7,7 @@
 <h2>Update Appointment</h2><br>
 
 <div class="container mb-5">
-    <form action="/update/{{appt.id}}" method="POST" onsubmit="update_appt_popup()" class="form">
+    <form action="/update/{{appt.id}}" method="POST" class="form">
 
 
         <div class="row">
@@ -78,19 +78,19 @@
 
                 <p class="list_heading">HCl:</p>
                 <div class="form-check">
-                    <input type="radio" class="form-check-input" name="material_update" id="36%_HCl" 
+                    <input type="radio" class="form-check-input" name="material_update" id="36% HCl" 
                         value="36% HCl" {% if appt.material == "36% HCl" %} checked {% endif %}>
                     <label class="form-check-label" for="36% HCl">36% HCl</label>
                 </div>
 
                 <div class="form-check">
-                    <input type="radio" name="material_update" id="32%_HCl" value="32% HCl" 
+                    <input type="radio" name="material_update" id="32% HCl" value="32% HCl" 
                         class="form-check-input" {% if appt.material == "32% HCl" %} checked {% endif %}>
                     <label for="32% HCl" class="form-check-label">32% HCl</label><br>
                 </div>
 
                 <div class="form-check">
-                    <input type="radio" name="material_update" id="15%_HCl" value="15% HCl" 
+                    <input type="radio" name="material_update" id="15% HCl" value="15% HCl" 
                         class="form-check-input" {% if appt.material == "15% HCl" %} checked {% endif %}>
                     <label for="15% HCl" class="form-check-label">15% HCl</label><br>
                 </div>
@@ -101,19 +101,31 @@
                 <p class="list_heading">Caustic:</p>
 
                 <div class="form-check">
-                    <input type="radio" name="material_update" id="50%_Caustic" value="50% Caustic" 
+                    <input type="radio" name="material_update" id="50% Caustic" value="50% Caustic" 
                         class="form-check-input" {% if appt.material == "50% Caustic" %} checked {% endif %}>
                     <label for="50% Caustic" class="form-check-label">50% Caustic</label><br>
                 </div>
 
                 <div class="form-check">
-                    <input type="radio" name="material_update" id="25%_Caustic" value="25% Caustic" 
+                    <input type="radio" name="material_update" id="32% Caustic" value="32% Caustic" 
+                        class="form-check-input" {% if appt.material == "32% Caustic" %} checked {% endif %}>
+                    <label for="32% Caustic" class="form-check-label">32% Caustic</label><br>
+                </div>
+
+                <div class="form-check">
+                    <input type="radio" name="material_update" id="30% Caustic" value="30% Caustic" 
+                        class="form-check-input" {% if appt.material == "30% Caustic" %} checked {% endif %}>
+                    <label for="30% Caustic" class="form-check-label">30% Caustic</label><br>
+                </div>
+
+                <div class="form-check">
+                    <input type="radio" name="material_update" id="25% Caustic" value="25% Caustic" 
                         class="form-check-input" {% if appt.material == "25% Caustic" %} checked {% endif %}>
                     <label for="25% Caustic" class="form-check-label">25% Caustic</label><br>
                 </div>
 
                 <div class="form-check">
-                    <input type="radio" name="material_update" id="20%_Caustic" value="20% Caustic" 
+                    <input type="radio" name="material_update" id="20% Caustic" value="20% Caustic" 
                         class="form-check-input" {% if appt.material == "20% Caustic" %} checked {% endif %}>
                     <label for="20% Caustic" class="form-check-label">20% Caustic</label><br>
                 </div>
@@ -122,15 +134,20 @@
             <div class="col-sm-4 col-md-3 col-lg-2">
                     <p class="list_heading">Bleach:</p>
 
+                <div class="form-check">
+                    <input type="radio" name="material_update" id="14%+ Bleach" value="14%+ Bleach" 
+                        class="form-check-input" {% if appt.material == "14%+ Bleach" %} checked {% endif %}>
+                    <label for="14%+ Bleach" class="form-check-label">14%+ Bleach</label><br>
+                </div>
 
                 <div class="form-check">
-                    <input type="radio" name="material_update" id="12.5%_Bleach" value="12.5% Bleach" 
+                    <input type="radio" name="material_update" id="12.5% Bleach" value="12.5% Bleach" 
                         class="form-check-input" {% if appt.material == "12.5% Bleach" %} checked {% endif %}>
                     <label for="12.5% Bleach" class="form-check-label">12.5% Bleach</label><br>
                 </div>
 
                 <div class="form-check">
-                    <input type="radio" name="material_update" id="10%_Bleach" value="10% Bleach" 
+                    <input type="radio" name="material_update" id="10% Bleach" value="10% Bleach" 
                         class="form-check-input" {% if appt.material == "10% Bleach" %} checked {% endif %}>
                     <label for="10% Bleach" class="form-check-label">10% Bleach</label><br><br>
                 </div>
@@ -144,7 +161,7 @@
                 <h4>Current pickup date: <u>{{ appt.pickup_date }}</u> (YYYY-MM-DD)</h4>
                 <label for="pickup_date">Select a new date:</label>
                 <input type="date" id="pickup_date" name="pickup_date" 
-                    value="{{ appt.pickup_date }}">
+                    value="{{ appt.pickup_date }}" class="form-control">
             </div>
         </div><br>
 
@@ -154,7 +171,7 @@
                 <h4>Current pickup time: <u>{{ appt.pickup_time }}</u> (24-hr)</h4>
                 <label for="pickup_time">Select a new time:</label>
                 <input type="time" id="pickup_time" name="pickup_time" 
-                    value="{{ appt.pickup_time }}">
+                    value="{{ appt.pickup_time }}" class="form-control">
             </div>
         </div><br>
 
@@ -179,7 +196,7 @@
             <div class="col-6 col-sm-6 col-md-6 col-lg-4">
                 <label for="notes"><b>Notes:</b></label><br>
                 <input class="form-control" type="text" name="notes" id="notes"
-                    value="{{ appt.notes }}"><br>
+                    value="{{ appt.notes }}"><br><br>
             </div>
         </div>
 

@@ -2,7 +2,7 @@
 
 {% block head %}
 <!--refresh the page each minute (time in seconds)-->
-<meta http-equiv="refresh" content="120">
+<!--<meta http-equiv="refresh" content="120">-->
 {% endblock %}
     
 {% block body %}
@@ -12,111 +12,192 @@
         <form action="/" method="GET">
             <div class="row gy-4">
 
+
+
+
                 <!--1st column-->
                 <div class="col">
+                    <h4>Product</h4>
                     <div class="form-check">
-                        <b>Select product:</b><br>
 
                         <input class="form-check-input filter" type="checkbox" 
-                            value="36% HCl" id="36% HCl" name="material_filter" checked>
+                            value="36% HCl" id="36% HCl" name="material_filter" 
+                            {% if '36% HCl' in search_material %}
+                            checked
+                            {% endif %}>
                         <label class="form-check-label" for="36% HCl">36% HCl</label><br>
                         <!--------------------------------------------------------->
                         <input class="form-check-input filter" type="checkbox" 
                         value="32% HCl" id="32% HCl" name="material_filter"
-                        checked>
+                        {% if '32% HCl' in search_material %}
+                            checked
+                        {% endif %}>
                         <label class="form-check-label" for="32% HCl">
                             32% HCl</label><br>
                         <!--------------------------------------------------------->
                         <input class="form-check-input filter" type="checkbox" 
                             name="material_filter" id="15% HCl" value="15% HCl" 
-                            checked>
+                            {% if '15% HCl' in search_material %}
+                            checked
+                            {% endif %}>
                         <label class="form-check-label" for="15% HCl">
                             15% HCl</label><br>
                         <!--------------------------------------------------------->
                         <input class="form-check-input filter" type="checkbox" 
                             value="50% Caustic" id="50% Caustic" name="material_filter"
-                            checked>
+                            {% if '50% Caustic' in search_material %}
+                            checked
+                            {% endif %}>
                         <label class="form-check-label" for="50% Caustic">
                             50% Caustic</label><br>
                         <!--------------------------------------------------------->
                         <input class="form-check-input filter" type="checkbox" 
+                        name="material_filter" id="32% Caustic" value="32% Caustic" 
+                        {% if '32% Caustic' in search_material %}
+                        checked
+                        {% endif %}>
+                        <label class="form-check-label" 
+                            for="32% Caustic">32% Caustic</label><br>
+                        <!--------------------------------------------------------->
+                        <input class="form-check-input filter" type="checkbox" 
+                        name="material_filter" id="30% Caustic" value="30% Caustic" 
+                        {% if '30% Caustic' in search_material %}
+                        checked
+                        {% endif %}>
+                        <label class="form-check-label" 
+                            for="30% Caustic">30% Caustic</label><br>
+                        <!--------------------------------------------------------->
+                        <input class="form-check-input filter" type="checkbox" 
                             name="material_filter" id="25% Caustic" value="25% Caustic" 
-                            checked>
+                            {% if '25% Caustic' in search_material %}
+                            checked
+                            {% endif %}>
                         <label class="form-check-label" 
                             for="25% Caustic">25% Caustic</label><br>
                         <!--------------------------------------------------------->
                         <input class="form-check-input filter" type="checkbox" 
                             name="material_filter" id="20% Caustic" value="20% Caustic" 
-                            checked>
+                            {% if '20% Caustic' in search_material %}
+                            checked
+                            {% endif %}>
                         <label class="form-check-label"
                             for="20% Caustic">20% Caustic</label><br>
                         <!--------------------------------------------------------->
                         <input class="form-check-input filter" type="checkbox" 
+                            name="material_filter" id="14%+ Bleach" value="14%+ Bleach" 
+                            {% if '14%+ Bleach' in search_material %}
+                            checked
+                            {% endif %}>
+                        <label class="form-check-label"
+                            for="14%+ Bleach">14%+ Bleach</label><br>
+                        <!--------------------------------------------------------->                        
+                        <input class="form-check-input filter" type="checkbox" 
                             name="material_filter" id="12.5% Bleach" value="12.5% Bleach" 
-                            checked>
+                            {% if '12.5% Bleach' in search_material %}
+                            checked
+                            {% endif %}>
                         <label class="form-check-label"
                             for="12.5% Bleach">12.5% Bleach</label><br>
                         <!--------------------------------------------------------->
                         <input class="form-check-input filter" type="checkbox" name="material_filter" 
-                            id="10%_Bleach_filter" value="10% Bleach" 
-                            checked>
+                            id="10%_Bleach" value="10% Bleach" 
+                            {% if '10% Bleach' in search_material %}
+                            checked
+                            {% endif %}>
                         <label class="form-check-label"
-                            for="10% Bleach">10% Bleach</label><br>
+                            for="10%_Bleach">10% Bleach</label><br>
                         <!--------------------------------------------------------->
-                        <input class="form-check-input" type="checkbox" 
+                        <input class="form-check-input filter" type="checkbox" 
                         onclick="toggle(this);" value="select_all" name="select_all" id="selectAll">
                         <label class="form-check-label"
-                            for="select_all">Select/Deselect All</label><br>
+                            for="selectAll">Select/Deselect All</label><br>
                         <!--------------------------------------------------------->
                     </div>
                 </div>
             
+
+
+
 
                 <!--2nd column-->
                 <div class="col text-center">
+                    <h4>Start date</h4>
                     <div class="date-input">
-                        <label for="start_date_filter">Choose a start date:</label><br>
                         <input type="date" id="start_date_filter" name="start_date_filter" 
-                            min="2022-01-01"><br>
+                            min="2022-01-01" value="{{ start_date }}" class="form-control-sm">
                     </div>
                     <!--------------------------------------------------------->
+                    <h4>End date</h4>
                     <div class="date-input">
-                        <label for="end_date_filter">Choose an end date:</label><br>
                         <input type="date" id="end_date_filter" name="end_date_filter" 
-                            min="2022-01-01"><br><br>
+                            min="2022-01-01" value="{{ end_date }}" class="form-control-sm"><br>
                     </div>
                     <!--------------------------------------------------------->
+                    <h4>Start time</h4>
                     <div class="time-input">
-                        <label for="start_time_filter">Choose a start time:</label><br>
                         <input type="time" id="start_time_filter" 
-                            name="start_time_filter" value="00:00"><br>
+                            name="start_time_filter" value="{{ start_time }}" class="form-control-sm">
                     </div>
                     <!--------------------------------------------------------->
+                    <h4>End time</h4>
                     <div class="time-input">
-                        <label for="end_time_filter">Choose an end time:</label><br>
                         <input type="time" id="end_time_filter" 
-                            name="end_time_filter" value="23:59"><br>
+                            name="end_time_filter" value="{{ end_time }}" class="form-control-sm">
                     </div>
                 </div>
             
 
+
+
                 <!--3rd column-->
                 <div class="col text-center">
-                    <b>Select a Customer:</b><br>
-                        <select name="carrier">
-                            <option value = "all">All</option>
-                            {% for carrier in carriers %}
-                                <option value = "{{ carrier.carrier_name }}">
-                                        {{ carrier.carrier_name }}</option>
-                            {% endfor %}
-                        </select>
+                    <h4>Customer</h4>
+                    <select name="carrier" class="form-select-sm">
+
+                        <option value = "All" 
+                            {% if carrier_selection == "all" %} 
+                                selected 
+                            {% endif %}>
+
+                            All
+                        </option>
+
+                        {% for carrier in carriers %}
+                            <option value = "{{ carrier.carrier_name }}" 
+
+                                {% if carrier_selection == carrier.carrier_name %}
+                                    selected
+                                {% endif %}>
+
+                                {{ carrier.carrier_name }}
+                            </option>
+                        {% endfor %}
+
+                    </select><br><br>
+
+                    <h4>Status</h4>
+                    <select name="status" class="form-select-sm">
+
+                        <option value = "All" 
+                            {% if status_selection == "All" %} selected {% endif %}>
+                        All</option>
+
+                        <option value = "Scheduled"
+                            {% if status_selection == "Scheduled" %} selected {% endif %}>
+                        Scheduled</option>
+
+                        <option value = "Completed" 
+                            {% if status_selection == "Completed" %} selected {% endif %}>
+                        Completed</option>
+
+                    </select>
                 </div>
 
 
                 <!--4th column-->
                 <div class="col text-center">
-                    <input type="submit" value="View Appointments" 
-                        class="btn btn-outline-success">
+                    <input type="submit" value="Search" 
+                        class="btn btn-outline-success" id="home_page_query">
                 </div>
             
 
@@ -137,7 +218,7 @@
 
 
     <div id="appointment_list">
-        <h2>Queried Appointments</h2>
+        <h2>Appointment Results</h2>
 
         <div class="table-responsive mx-5">
             <table class="table">
@@ -212,7 +293,7 @@
 
     </div>
 
-    <h2>Query Statistics</h2>
+    <h2>Statistics</h2>
 
     <div class="table-responsive mx-5 mb-5">
         <table class="table">
@@ -220,25 +301,25 @@
                 <tr>
                     <th scope="col">Product</th>
                     <th scope="col"># of Loads</th>
-                    <th scope="col">Total Volume [gallons]</th>
+                    <th scope="col">Total Volume [x 1,000 gal]</th>
                 </tr>
             </thead>
 
             <tbody>          
                 <tr>
                     <td>HCl</td>
-                    <td>{{hcl_load_counter}}</td>
-                    <td>{{hcl_volumeList}}</td>
+                    <td>{{hcl_load_total_count}}</td>
+                    <td>{{hcl_gallons}}</td>
                 </tr>
                 <tr>
                     <td>Caustic</td>
-                    <td>{{caustic_load_counter}}</td>
-                    <td>{{caustic_volumeList}}</td>
+                    <td>{{caustic_load_total_count}}</td>
+                    <td>{{caustic_gallons}}</td>
                 </tr>
                 <tr>
                     <td>Bleach</td>
-                    <td>{{bleach_load_counter}}</td>
-                    <td>{{bleach_volumeList}}</td>
+                    <td>{{bleach_load_total_count}}</td>
+                    <td>{{bleach_gallons}}</td>
                 </tr>
             </tbody>
         </table>
@@ -250,21 +331,32 @@
 
 <script>
 
+/*
+To set the date for HTML element:
 document.getElementById('start_date_filter').valueAsDate = new Date();
 document.getElementById('end_date_filter').valueAsDate = new Date();
-
+*/
 
 
 /*
-refresh the page at some specified interval, 
-    time in milliseconds.
+To refresh the page at some specified interval:
+    (time in milliseconds)
     1 second = 1,000 milliseconds
     1 minute = 60,000 milliseconds
 
 setTimeout(function(){
    window.location.reload(1);
-}, 120000);
+}, 60000);
 */
+
+
+// To run the home page query at a specified interval:
+setTimeout(function(){
+   document.getElementById("home_page_query").click();
+}, 120000);
+
+
+
 </script>
 
 

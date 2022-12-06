@@ -7,7 +7,7 @@
 <h2>Create a New Appointment</h2><br>
 
 <div class="container mb-5">
-    <form action="/" 
+    <form action="{{ url_for('views.create') }}" 
         method="POST" 
         onsubmit="return validateForm()" 
         id="new_appt_form"
@@ -63,7 +63,7 @@
                         class="form-check-input" 
                         type="radio" 
                         name="material" 
-                        id="36%_HCl" 
+                        id="36% HCl" 
                         value="36% HCl">
                     <label 
                         class="form-check-label"
@@ -75,7 +75,7 @@
                         class="form-check-input" 
                         type="radio" 
                         name="material" 
-                        id="32%_HCl" 
+                        id="32% HCl" 
                         value="32% HCl">
                     <label 
                         class="form-check-label"
@@ -87,7 +87,7 @@
                         class="form-check-input" 
                         type="radio" 
                         name="material" 
-                        id="15%_HCl" 
+                        id="15% HCl" 
                         value="15% HCl">
                     <label 
                         class="form-check-label"
@@ -100,17 +100,27 @@
 
                 <p>Caustic:</p>
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="material" id="50%_Caustic" value="50% Caustic">
+                    <input class="form-check-input" type="radio" name="material" id="50% Caustic" value="50% Caustic">
                     <label for="50% Caustic">50% Caustic</label>
                 </div>
 
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="material" id="25%_Caustic" value="25% Caustic">
+                    <input class="form-check-input" type="radio" name="material" id="32% Caustic" value="32% Caustic">
+                    <label for="32% Caustic">32% Caustic</label>
+                </div>
+
+                <div class="form-check">  
+                    <input class="form-check-input" type="radio" name="material" id="30% Caustic" value="30% Caustic">
+                    <label for="30% Caustic">30% Caustic</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="material" id="25% Caustic" value="25% Caustic">
                     <label for="25% Caustic">25% Caustic</label>
                 </div>
 
                 <div class="form-check">  
-                    <input class="form-check-input" type="radio" name="material" id="20%_Caustic" value="20% Caustic">
+                    <input class="form-check-input" type="radio" name="material" id="20% Caustic" value="20% Caustic">
                     <label for="20% Caustic">20% Caustic</label>
                 </div>
 
@@ -121,12 +131,17 @@
                 <p>Bleach:</p>
 
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="material" id="12.5%_Bleach" value="12.5% Bleach">
+                    <input class="form-check-input" type="radio" name="material" id="14%+ Bleach" value="14%+ Bleach">
+                    <label for="14%+ Bleach">14%+ Bleach</label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="material" id="12.5% Bleach" value="12.5% Bleach">
                     <label for="12.5% Bleach">12.5% Bleach</label>
                 </div>
 
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="material" id="10%_Bleach" value="10% Bleach">
+                    <input class="form-check-input" type="radio" name="material" id="10% Bleach" value="10% Bleach">
                     <label for="10% Bleach">10% Bleach</label>
                 </div>
 
@@ -140,7 +155,7 @@
         <div class="row">
             <div class="col-8 col-sm-6 col-md-6 col-lg-4">
                 <label for="pickup_date"><b>Pickup Date:</b></label>
-                <input type="date" id="pickup_date" name="pickup_date">
+                <input type="date" id="pickup_date" name="pickup_date" class="form-control">
             </div>
         </div><br>
 
@@ -149,7 +164,7 @@
         <div class="row">
             <div class="col-6 col-sm-6 col-md-6 col-lg-4">
                 <label for="pickup_time"><b>Pickup Time:</b></label>
-                <input type="time" id="pickup_time" name="pickup_time">
+                <input type="time" id="pickup_time" name="pickup_time" class="form-control">
             </div>
         </div><br>
 
@@ -177,7 +192,7 @@
                     name="notes" 
                     id="notes">
             </div>
-        </div><br>
+        </div><br><br>
 
 
         <button
@@ -218,9 +233,6 @@
         } else if (z == "") {
             alert("Please choose a product");
             return false;
-
-        } else {
-            alert("Your appointment was successfully created");
 
         }
 
