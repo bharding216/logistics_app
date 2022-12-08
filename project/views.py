@@ -185,9 +185,18 @@ def create():
         status = 'Scheduled'
         notes = request.form['notes']
 
+
+        if 'HCl' in material_name:
+            category = 'HCl'
+        if 'Caustic' in material_name:
+            category = 'Caustic'
+        if 'Bleach' in material_name:
+            category = 'Bleach'
+
+
         # Try to find an appointment in that time slot.
         duplicate_appt = appts_db.query.filter(and_(
-            appts_db.material == material_name,
+            appts_db.material.contains(category),
             appts_db.pickup_date == pickup_date_input,
             appts_db.pickup_time == pickup_time_input
             )).first()
@@ -282,15 +291,21 @@ def update(id):
                 modified_by=current_user.username
             )
 
+            # To get the category of the product for the new appointment
+            if 'HCl' in request.form['material_update']:
+                category = 'HCl'
+            if 'Caustic' in request.form['material_update']:
+                category = 'Caustic'
+            if 'Bleach' in request.form['material_update']:
+                category = 'Bleach'
+
             duplicate_appt = appts_db.query.filter(and_(
-                appts_db.material == request.form['material_update'],
+                appts_db.material.contains(category),
                 appts_db.pickup_date == request.form['pickup_date'],
                 appts_db.pickup_time == request.form['pickup_time']
                 )).first()
-
-            print(duplicate_appt)
             
-            if duplicate_appt is None:
+            if duplicate_appt is None or appt.id == duplicate_appt.id:
 
                 # Collect NEW appt data and modify 'appt':
                 appt.carrier = request.form['carrier']
