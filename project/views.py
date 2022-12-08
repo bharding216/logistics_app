@@ -69,7 +69,7 @@ def index():
         .filter(appts_db.material.in_(search_material)) \
         .filter(appts_db.pickup_date.between(start_date, end_date)) \
         .filter(appts_db.pickup_time.between(start_time, end_time)) \
-        .order_by(appts_db.pickup_date).all()     
+        .order_by(appts_db.pickup_date, appts_db.pickup_time).all()     
 
   
     # To generate the carriers within the dropdown list
