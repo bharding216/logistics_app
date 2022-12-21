@@ -1,6 +1,6 @@
 # Logistics App
 
-This is my first full stack web application. 
+The purpose of this application is to track and manage the shipment of bulk chemicals. 
 
 Components:
 Bootstrap framework (CSS) and HTML on the front end 
