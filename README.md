@@ -10,7 +10,12 @@ There were several motivating factors for completing this project:
 - Give structure to the data so that analysis can be performed
 - Create user 'roles' and access rights to improve data integrity
 
-Throughout this project I learned how to create RESTful APIs, how to deploy a database to a remote server (using Heroku), how to implement user authentication and assign access rights/permissions to each user, and (most importantly) how to collaborate with industry professionals and create a software product that makes their job much easier. 
+Throughout this project I learned so many great skills, such as:
+- how to create RESTful APIs,
+- how to deploy a database to a remote server (using Heroku), 
+- how to send an email based on a user action on the website, 
+- how to implement user authentication and assign access rights/permissions to each user, and (most importantly) 
+- how to collaborate with industry professionals and create a software product that makes their job much easier. 
 
 ## Using the Project
 
