@@ -1,17 +1,16 @@
 # Logistics Management Application
 
 ## Project Description
-The purpose of this project was to create a tool that can track the bulk chemical outbound shipments for a chemical manufacturer. The manufacturer was using a spreadsheet to manage their schedule. 
+The purpose of this project was to create a tool that can track the bulk chemical outbound shipments for a chemical manufacturer (client). The manufacturer was previously using a spreadsheet to manage their schedule. 
 
-The application is useful because 
+There were several motivating factors for completing this project:
+- To improve the security of the data by storing it in a relational database (MySQL)
+- We needed an application that could live-update
+- Reduce the number of emails sent (and the potential for an email to go unnoticed)
+- Give structure to the data so that analysis can be performed
+- Create user 'roles' and access rights to improve data integrity
 
-Components:
-Bootstrap framework (CSS) and HTML on the front end 
-Flask (Python) for the back end
-MySQL for the database. 
-
-There are also some bells and whistles that I implemented using Javascript. 
-
+Throughout this project I learned how to create RESTful APIs, how to deploy a database to a remote server (using Heroku), how to impplement user authentication and assign access rights/permissions to each user, and (most importantly) how to collaborate with industry professionals and create a software product that makes their job much easier. 
 
 ## Using the Project
 
@@ -38,5 +37,5 @@ env\Scripts\activate.bat
 6. Now you are ready to run the program!
 
 ## License
-
+MIT License
 
